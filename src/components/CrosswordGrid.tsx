@@ -22,6 +22,13 @@ export const CrosswordGrid = () => {
   const width = maxX - minX + 1;
   const height = maxY - minY + 1;
 
+  // Calculate scale to fit within a reasonable area on mobile screens
+  const maxGridWidth = 20; // rem
+  const maxGridHeight = 20; // rem
+  const scaleX = maxGridWidth / (width * 3);
+  const scaleY = maxGridHeight / (height * 3);
+  const scale = Math.min(1, scaleX, scaleY);
+
   // Create grid cells
   const cells: { x: number; y: number; letter: string; isRevealed: boolean }[] = [];
 
@@ -43,15 +50,24 @@ export const CrosswordGrid = () => {
   });
 
   return (
-    <div className="flex-1 flex items-center justify-center p-4">
+    <div className="flex-1 w-full flex items-center justify-center p-2 min-h-0">
       <div 
-        className="relative"
+        className="relative flex items-center justify-center"
         style={{
-          width: `${width * 3}rem`,
-          height: `${height * 3}rem`,
+          width: `${width * 3 * scale}rem`,
+          height: `${height * 3 * scale}rem`,
         }}
       >
-        {cells.map((cell, i) => (
+        <div 
+          className="absolute top-0 left-0"
+          style={{
+            width: `${width * 3}rem`,
+            height: `${height * 3}rem`,
+            transform: `scale(${scale})`,
+            transformOrigin: 'top left'
+          }}
+        >
+          {cells.map((cell, i) => (
           <motion.div
             key={`${cell.x}-${cell.y}`}
             initial={{ scale: 0, rotate: -180 }}
@@ -78,6 +94,7 @@ export const CrosswordGrid = () => {
             )}
           </motion.div>
         ))}
+        </div>
       </div>
     </div>
   );
