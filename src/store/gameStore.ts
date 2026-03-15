@@ -35,6 +35,7 @@ const INITIAL_STATE: GameState = {
   lastLoginDate: null,
   levelsCompleted: 0,
   totalPlayTime: 0,
+  playedLevels: [],
 };
 
 export const useGameStore = create<GameStore>()(
@@ -44,12 +45,13 @@ export const useGameStore = create<GameStore>()(
       soundEnabled: true,
 
       loadLevel: (levelId) => {
-        set({
+        set((s) => ({
           currentLevelId: levelId,
           wordsFound: [],
           bonusWordsFound: [],
           revealedCells: [],
-        });
+          playedLevels: s.playedLevels.includes(levelId) ? s.playedLevels : [...s.playedLevels, levelId],
+        }));
         get().syncToCloud();
       },
 
@@ -213,6 +215,7 @@ export const useGameStore = create<GameStore>()(
             lastLoginDate: state.lastLoginDate,
             levelsCompleted: state.levelsCompleted,
             totalPlayTime: state.totalPlayTime,
+            playedLevels: state.playedLevels,
             updatedAt: serverTimestamp()
           }, { merge: true });
         } catch (error) {
@@ -237,6 +240,7 @@ export const useGameStore = create<GameStore>()(
               lastLoginDate: data.lastLoginDate ?? null,
               levelsCompleted: data.levelsCompleted ?? 0,
               totalPlayTime: data.totalPlayTime ?? 0,
+              playedLevels: data.playedLevels ?? [],
             });
           }
         } catch (error) {

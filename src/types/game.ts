@@ -35,4 +35,5 @@ export interface GameState {
   lastLoginDate: string | null;
   levelsCompleted: number;
   totalPlayTime: number; // in seconds
+  playedLevels: number[];
 }

@@ -12,20 +12,26 @@ export const LEVELS: Level[] = [
     ],
     "words": [
       {
-        "word": "CAT",
+        "word": "BAT",
         "x": 0,
-        "y": 1,
+        "y": 0,
         "direction": "horizontal"
       },
       {
         "word": "ACT",
-        "x": 0,
+        "x": 1,
         "y": 0,
         "direction": "vertical"
+      },
+      {
+        "word": "CAT",
+        "x": 1,
+        "y": 1,
+        "direction": "horizontal"
       }
     ],
     "bonusWords": [
-      "BAT",
+      "CAB",
       "TAB"
     ]
   },
@@ -35,24 +41,33 @@ export const LEVELS: Level[] = [
     "letters": [
       "D",
       "O",
-      "G"
+      "G",
+      "S"
     ],
     "words": [
       {
         "word": "DOG",
         "x": 0,
-        "y": 2,
+        "y": 0,
         "direction": "horizontal"
       },
       {
         "word": "GOD",
-        "x": 0,
+        "x": 2,
         "y": 0,
         "direction": "vertical"
+      },
+      {
+        "word": "DOGS",
+        "x": 2,
+        "y": 2,
+        "direction": "horizontal"
       }
     ],
     "bonusWords": [
-      "GOOD"
+      "SO",
+      "GO",
+      "DO"
     ]
   },
   {
@@ -61,256 +76,73 @@ export const LEVELS: Level[] = [
     "letters": [
       "S",
       "U",
-      "N"
+      "N",
+      "P"
     ],
     "words": [
       {
         "word": "SUN",
         "x": 0,
-        "y": 1,
+        "y": 0,
         "direction": "horizontal"
       },
       {
-        "word": "NUN",
+        "word": "UPS",
         "x": 1,
         "y": 0,
         "direction": "vertical"
+      },
+      {
+        "word": "PUN",
+        "x": 1,
+        "y": 1,
+        "direction": "horizontal"
       }
     ],
     "bonusWords": [
-      "US"
+      "US",
+      "PUP",
+      "PUNS"
     ]
   },
   {
     "id": 4,
     "difficulty": "Beginner",
     "letters": [
-      "C",
       "A",
       "R",
-      "T"
+      "T",
+      "S"
     ],
     "words": [
       {
-        "word": "CAR",
+        "word": "STAR",
         "x": 0,
-        "y": 2,
+        "y": 0,
         "direction": "horizontal"
       },
       {
-        "word": "ARC",
-        "x": 0,
+        "word": "ART",
+        "x": 2,
         "y": 0,
         "direction": "vertical"
+      },
+      {
+        "word": "RAT",
+        "x": 0,
+        "y": 2,
+        "direction": "horizontal"
       }
     ],
     "bonusWords": [
-      "ART",
       "TAR",
-      "RAT"
+      "SAT",
+      "ARTS"
     ]
   },
   {
     "id": 5,
     "difficulty": "Beginner",
-    "letters": [
-      "P",
-      "E",
-      "N",
-      "I"
-    ],
-    "words": [
-      {
-        "word": "PEN",
-        "x": 0,
-        "y": 0,
-        "direction": "horizontal"
-      },
-      {
-        "word": "PIN",
-        "x": 0,
-        "y": 0,
-        "direction": "vertical"
-      }
-    ],
-    "bonusWords": [
-      "PINE",
-      "NIP"
-    ]
-  },
-  {
-    "id": 6,
-    "difficulty": "Beginner",
-    "letters": [
-      "H",
-      "A",
-      "T",
-      "C"
-    ],
-    "words": [
-      {
-        "word": "HAT",
-        "x": 0,
-        "y": 1,
-        "direction": "horizontal"
-      },
-      {
-        "word": "THAT",
-        "x": 0,
-        "y": 0,
-        "direction": "vertical"
-      }
-    ],
-    "bonusWords": [
-      "CHAT"
-    ]
-  },
-  {
-    "id": 7,
-    "difficulty": "Beginner",
-    "letters": [
-      "L",
-      "I",
-      "P",
-      "S"
-    ],
-    "words": [
-      {
-        "word": "LIP",
-        "x": 0,
-        "y": 1,
-        "direction": "horizontal"
-      },
-      {
-        "word": "SLIP",
-        "x": 0,
-        "y": 0,
-        "direction": "vertical"
-      }
-    ],
-    "bonusWords": [
-      "LIPS"
-    ]
-  },
-  {
-    "id": 8,
-    "difficulty": "Beginner",
-    "letters": [
-      "P",
-      "O",
-      "T",
-      "S"
-    ],
-    "words": [
-      {
-        "word": "POT",
-        "x": 0,
-        "y": 2,
-        "direction": "horizontal"
-      },
-      {
-        "word": "TOP",
-        "x": 0,
-        "y": 0,
-        "direction": "vertical"
-      }
-    ],
-    "bonusWords": [
-      "STOP",
-      "POST",
-      "SPOT"
-    ]
-  },
-  {
-    "id": 9,
-    "difficulty": "Beginner",
-    "letters": [
-      "C",
-      "A",
-      "R",
-      "E"
-    ],
-    "words": [
-      {
-        "word": "CARE",
-        "x": 0,
-        "y": 2,
-        "direction": "horizontal"
-      },
-      {
-        "word": "RACE",
-        "x": 0,
-        "y": 0,
-        "direction": "vertical"
-      }
-    ],
-    "bonusWords": [
-      "CAR",
-      "EAR",
-      "ARC"
-    ]
-  },
-  {
-    "id": 10,
-    "difficulty": "Beginner",
-    "letters": [
-      "B",
-      "E",
-      "A",
-      "R"
-    ],
-    "words": [
-      {
-        "word": "BEAR",
-        "x": 0,
-        "y": 0,
-        "direction": "horizontal"
-      },
-      {
-        "word": "BARE",
-        "x": 0,
-        "y": 0,
-        "direction": "vertical"
-      }
-    ],
-    "bonusWords": [
-      "EAR",
-      "BAR",
-      "ARE"
-    ]
-  },
-  {
-    "id": 11,
-    "difficulty": "Easy",
-    "letters": [
-      "D",
-      "E",
-      "A",
-      "R"
-    ],
-    "words": [
-      {
-        "word": "DEAR",
-        "x": 0,
-        "y": 3,
-        "direction": "horizontal"
-      },
-      {
-        "word": "READ",
-        "x": 0,
-        "y": 0,
-        "direction": "vertical"
-      }
-    ],
-    "bonusWords": [
-      "DARE",
-      "RED",
-      "EAR"
-    ]
-  },
-  {
-    "id": 12,
-    "difficulty": "Easy",
     "letters": [
       "M",
       "E",
@@ -321,85 +153,36 @@ export const LEVELS: Level[] = [
       {
         "word": "MEAT",
         "x": 0,
-        "y": 3,
-        "direction": "horizontal"
-      },
-      {
-        "word": "TEAM",
-        "x": 0,
-        "y": 0,
-        "direction": "vertical"
-      }
-    ],
-    "bonusWords": [
-      "TAME",
-      "MATE",
-      "EAT",
-      "TEA",
-      "MAT"
-    ]
-  },
-  {
-    "id": 13,
-    "difficulty": "Easy",
-    "letters": [
-      "S",
-      "E",
-      "A",
-      "T"
-    ],
-    "words": [
-      {
-        "word": "SEAT",
-        "x": 0,
         "y": 2,
         "direction": "horizontal"
       },
       {
-        "word": "EAST",
-        "x": 0,
+        "word": "TEAM",
+        "x": 2,
         "y": 0,
         "direction": "vertical"
-      }
-    ],
-    "bonusWords": [
-      "TEAS",
-      "SEA",
-      "EAT",
-      "ATE"
-    ]
-  },
-  {
-    "id": 14,
-    "difficulty": "Easy",
-    "letters": [
-      "W",
-      "O",
-      "L",
-      "F"
-    ],
-    "words": [
+      },
       {
-        "word": "WOLF",
-        "x": 0,
+        "word": "MAT",
+        "x": 2,
         "y": 3,
         "direction": "horizontal"
       },
       {
-        "word": "FLOW",
-        "x": 0,
-        "y": 0,
-        "direction": "vertical"
+        "word": "EAT",
+        "x": 2,
+        "y": 1,
+        "direction": "horizontal"
       }
     ],
     "bonusWords": [
-      "FOWL",
-      "LOW",
-      "OWL"
+      "TEA",
+      "ATE",
+      "TAME"
     ]
   },
   {
-    "id": 15,
+    "id": 6,
     "difficulty": "Easy",
     "letters": [
       "W",
@@ -410,88 +193,37 @@ export const LEVELS: Level[] = [
     ],
     "words": [
       {
-        "word": "WORD",
-        "x": 0,
-        "y": 1,
+        "word": "SWORD",
+        "x": 1,
+        "y": 0,
         "direction": "horizontal"
       },
       {
-        "word": "SWORD",
-        "x": 0,
+        "word": "WORDS",
+        "x": 2,
         "y": 0,
         "direction": "vertical"
-      }
-    ],
-    "bonusWords": [
-      "ROW",
-      "ROD"
-    ]
-  },
-  {
-    "id": 16,
-    "difficulty": "Easy",
-    "letters": [
-      "T",
-      "I",
-      "M",
-      "E"
-    ],
-    "words": [
+      },
       {
-        "word": "TIME",
-        "x": 0,
+        "word": "ROW",
+        "x": 2,
         "y": 2,
         "direction": "horizontal"
       },
       {
-        "word": "MITE",
+        "word": "ROD",
         "x": 0,
-        "y": 0,
-        "direction": "vertical"
-      }
-    ],
-    "bonusWords": [
-      "ITEM",
-      "EMIT",
-      "TIE",
-      "MET"
-    ]
-  },
-  {
-    "id": 17,
-    "difficulty": "Easy",
-    "letters": [
-      "H",
-      "E",
-      "A",
-      "R",
-      "T"
-    ],
-    "words": [
-      {
-        "word": "HEART",
-        "x": 0,
-        "y": 4,
+        "y": 3,
         "direction": "horizontal"
-      },
-      {
-        "word": "EARTH",
-        "x": 0,
-        "y": 0,
-        "direction": "vertical"
       }
     ],
     "bonusWords": [
-      "HATER",
-      "HEAR",
-      "TEAR",
-      "ART",
-      "EAR",
-      "HAT"
+      "SOW",
+      "WORD"
     ]
   },
   {
-    "id": 18,
+    "id": 7,
     "difficulty": "Easy",
     "letters": [
       "S",
@@ -503,59 +235,36 @@ export const LEVELS: Level[] = [
     "words": [
       {
         "word": "SMILE",
-        "x": 0,
-        "y": 4,
+        "x": 1,
+        "y": 0,
         "direction": "horizontal"
       },
       {
         "word": "MILES",
-        "x": 0,
+        "x": 2,
         "y": 0,
         "direction": "vertical"
-      }
-    ],
-    "bonusWords": [
-      "SLIME",
-      "MILE",
-      "ISLE"
-    ]
-  },
-  {
-    "id": 19,
-    "difficulty": "Easy",
-    "letters": [
-      "S",
-      "T",
-      "O",
-      "N",
-      "E"
-    ],
-    "words": [
+      },
       {
-        "word": "STONE",
+        "word": "ISLE",
         "x": 0,
-        "y": 4,
+        "y": 2,
         "direction": "horizontal"
       },
       {
-        "word": "TONES",
-        "x": 0,
-        "y": 0,
-        "direction": "vertical"
+        "word": "SLIME",
+        "x": 2,
+        "y": 4,
+        "direction": "horizontal"
       }
     ],
     "bonusWords": [
-      "NOTES",
-      "TONE",
-      "NOTE",
-      "SON",
-      "NOT",
-      "NET",
-      "TEN"
+      "MILE",
+      "LIME"
     ]
   },
   {
-    "id": 20,
+    "id": 8,
     "difficulty": "Easy",
     "letters": [
       "W",
@@ -572,916 +281,618 @@ export const LEVELS: Level[] = [
         "direction": "horizontal"
       },
       {
-        "word": "WEAR",
-        "x": 0,
+        "word": "TEAR",
+        "x": 2,
         "y": 0,
         "direction": "vertical"
-      }
-    ],
-    "bonusWords": [
-      "TEAR",
-      "RATE",
-      "ART",
-      "WAR",
-      "RAW",
-      "ATE"
-    ]
-  },
-  {
-    "id": 21,
-    "difficulty": "Easy",
-    "letters": [
-      "N",
-      "I",
-      "G",
-      "H",
-      "T"
-    ],
-    "words": [
+      },
       {
-        "word": "NIGHT",
-        "x": 0,
+        "word": "RATE",
+        "x": 2,
         "y": 3,
         "direction": "horizontal"
       },
       {
-        "word": "THING",
+        "word": "ART",
+        "x": 4,
+        "y": 1,
+        "direction": "vertical"
+      }
+    ],
+    "bonusWords": [
+      "WAR",
+      "RAW",
+      "ATE",
+      "TAR"
+    ]
+  },
+  {
+    "id": 9,
+    "difficulty": "Easy",
+    "letters": [
+      "H",
+      "E",
+      "A",
+      "R",
+      "T"
+    ],
+    "words": [
+      {
+        "word": "HEART",
+        "x": 0,
+        "y": 0,
+        "direction": "horizontal"
+      },
+      {
+        "word": "EARTH",
+        "x": 1,
+        "y": 0,
+        "direction": "vertical"
+      },
+      {
+        "word": "ART",
+        "x": 1,
+        "y": 1,
+        "direction": "horizontal"
+      },
+      {
+        "word": "TEAR",
+        "x": 1,
+        "y": 3,
+        "direction": "horizontal"
+      }
+    ],
+    "bonusWords": [
+      "HEAR",
+      "RATE",
+      "HAT",
+      "EAR"
+    ]
+  },
+  {
+    "id": 10,
+    "difficulty": "Easy",
+    "letters": [
+      "S",
+      "T",
+      "O",
+      "N",
+      "E"
+    ],
+    "words": [
+      {
+        "word": "STONE",
+        "x": 0,
+        "y": 0,
+        "direction": "horizontal"
+      },
+      {
+        "word": "TONES",
+        "x": 1,
+        "y": 0,
+        "direction": "vertical"
+      },
+      {
+        "word": "ONE",
+        "x": 1,
+        "y": 1,
+        "direction": "horizontal"
+      },
+      {
+        "word": "NET",
+        "x": 1,
+        "y": 2,
+        "direction": "horizontal"
+      },
+      {
+        "word": "SON",
         "x": 0,
         "y": 0,
         "direction": "vertical"
       }
     ],
     "bonusWords": [
-      "THIN",
-      "HINT",
-      "HIT",
-      "TIN"
+      "TONE",
+      "NOTE",
+      "NOTES",
+      "TEN"
     ]
   },
   {
-    "id": 22,
-    "difficulty": "Easy",
+    "id": 11,
+    "difficulty": "Medium",
     "letters": [
+      "P",
       "L",
-      "I",
-      "G",
-      "H",
+      "A",
+      "N",
+      "E",
       "T"
     ],
     "words": [
       {
-        "word": "LIGHT",
+        "word": "PLANET",
         "x": 0,
         "y": 0,
         "direction": "horizontal"
-      }
-    ],
-    "bonusWords": []
-  },
-  {
-    "id": 23,
-    "difficulty": "Easy",
-    "letters": [
-      "H",
-      "O",
-      "U",
-      "S",
-      "E"
-    ],
-    "words": [
+      },
       {
-        "word": "HOUSE",
+        "word": "PLANT",
+        "x": 0,
+        "y": 0,
+        "direction": "vertical"
+      },
+      {
+        "word": "LATE",
         "x": 0,
         "y": 1,
         "direction": "horizontal"
       },
       {
-        "word": "SHOES",
-        "x": 0,
-        "y": 0,
-        "direction": "vertical"
-      }
-    ],
-    "bonusWords": [
-      "HOSE",
-      "SHOE",
-      "USE",
-      "SUE"
-    ]
-  },
-  {
-    "id": 24,
-    "difficulty": "Easy",
-    "letters": [
-      "M",
-      "O",
-      "U",
-      "S",
-      "E"
-    ],
-    "words": [
-      {
-        "word": "MOUSE",
-        "x": 0,
-        "y": 0,
-        "direction": "horizontal"
-      },
-      {
-        "word": "MUSE",
-        "x": 0,
-        "y": 0,
-        "direction": "vertical"
-      }
-    ],
-    "bonusWords": [
-      "SOME",
-      "SUM",
-      "USE"
-    ]
-  },
-  {
-    "id": 25,
-    "difficulty": "Easy",
-    "letters": [
-      "T",
-      "R",
-      "A",
-      "I",
-      "N"
-    ],
-    "words": [
-      {
-        "word": "TRAIN",
-        "x": 0,
-        "y": 0,
-        "direction": "horizontal"
-      },
-      {
-        "word": "RAIN",
-        "x": 1,
-        "y": 0,
-        "direction": "vertical"
-      }
-    ],
-    "bonusWords": [
-      "RAN",
-      "ART",
-      "TAR",
-      "RAT",
-      "TIN"
-    ]
-  },
-  {
-    "id": 26,
-    "difficulty": "Medium",
-    "letters": [
-      "T",
-      "R",
-      "A",
-      "C",
-      "K"
-    ],
-    "words": [
-      {
-        "word": "TRACK",
-        "x": 0,
-        "y": 0,
-        "direction": "horizontal"
-      },
-      {
-        "word": "RACK",
-        "x": 1,
-        "y": 0,
-        "direction": "vertical"
-      }
-    ],
-    "bonusWords": [
-      "CART",
-      "ART",
-      "CAT",
-      "ACT",
-      "RAT"
-    ]
-  },
-  {
-    "id": 27,
-    "difficulty": "Medium",
-    "letters": [
-      "B",
-      "R",
-      "E",
-      "A",
-      "D"
-    ],
-    "words": [
-      {
-        "word": "BREAD",
-        "x": 0,
-        "y": 0,
-        "direction": "horizontal"
-      },
-      {
-        "word": "BEAR",
-        "x": 0,
-        "y": 0,
-        "direction": "vertical"
-      }
-    ],
-    "bonusWords": [
-      "BARE",
-      "DARE",
-      "READ",
-      "DEAR",
-      "RED",
-      "BAD",
-      "BED"
-    ]
-  },
-  {
-    "id": 28,
-    "difficulty": "Medium",
-    "letters": [
-      "B",
-      "R",
-      "E",
-      "A",
-      "K"
-    ],
-    "words": [
-      {
-        "word": "BREAK",
-        "x": 0,
-        "y": 0,
-        "direction": "horizontal"
-      },
-      {
-        "word": "BAKER",
-        "x": 0,
-        "y": 0,
-        "direction": "vertical"
-      }
-    ],
-    "bonusWords": [
-      "BEAR",
-      "BARE",
-      "BARK",
-      "EAR",
-      "ERA",
-      "ARE"
-    ]
-  },
-  {
-    "id": 29,
-    "difficulty": "Medium",
-    "letters": [
-      "C",
-      "L",
-      "E",
-      "A",
-      "N"
-    ],
-    "words": [
-      {
-        "word": "CLEAN",
-        "x": 0,
-        "y": 3,
-        "direction": "horizontal"
-      },
-      {
-        "word": "LANCE",
-        "x": 0,
-        "y": 0,
-        "direction": "vertical"
-      }
-    ],
-    "bonusWords": [
-      "CLAN",
-      "LANE",
-      "LEAN",
-      "CAN",
-      "ALE"
-    ]
-  },
-  {
-    "id": 30,
-    "difficulty": "Medium",
-    "letters": [
-      "C",
-      "L",
-      "E",
-      "A",
-      "R"
-    ],
-    "words": [
-      {
-        "word": "CLEAR",
-        "x": 0,
-        "y": 0,
-        "direction": "horizontal"
-      }
-    ],
-    "bonusWords": []
-  },
-  {
-    "id": 31,
-    "difficulty": "Medium",
-    "letters": [
-      "D",
-      "R",
-      "E",
-      "A",
-      "M"
-    ],
-    "words": [
-      {
-        "word": "DREAM",
+        "word": "TALE",
         "x": 0,
         "y": 4,
         "direction": "horizontal"
       },
       {
-        "word": "ARMED",
+        "word": "PALE",
+        "x": 2,
+        "y": 2,
+        "direction": "vertical"
+      }
+    ],
+    "bonusWords": [
+      "PLANE",
+      "PANEL",
+      "LEAP",
+      "PANT"
+    ]
+  },
+  {
+    "id": 12,
+    "difficulty": "Medium",
+    "letters": [
+      "S",
+      "P",
+      "R",
+      "I",
+      "N",
+      "G"
+    ],
+    "words": [
+      {
+        "word": "SPRING",
         "x": 0,
+        "y": 0,
+        "direction": "horizontal"
+      },
+      {
+        "word": "RINGS",
+        "x": 2,
+        "y": 0,
+        "direction": "vertical"
+      },
+      {
+        "word": "SIGN",
+        "x": 2,
+        "y": 4,
+        "direction": "horizontal"
+      },
+      {
+        "word": "PIG",
+        "x": 1,
         "y": 0,
         "direction": "vertical"
       }
     ],
     "bonusWords": [
-      "READ",
-      "DEAR",
-      "DARE",
-      "ARM",
-      "MAD",
-      "RED"
+      "RING",
+      "SING",
+      "SPIN",
+      "GRIP"
     ]
   },
   {
-    "id": 32,
+    "id": 13,
     "difficulty": "Medium",
     "letters": [
-      "D",
+      "B",
       "R",
-      "I",
+      "A",
       "N",
-      "K"
+      "C",
+      "H"
     ],
     "words": [
       {
-        "word": "DRINK",
+        "word": "BRANCH",
+        "x": 0,
+        "y": 0,
+        "direction": "horizontal"
+      },
+      {
+        "word": "RANCH",
+        "x": 1,
+        "y": 0,
+        "direction": "vertical"
+      },
+      {
+        "word": "CRAB",
+        "x": 1,
+        "y": 3,
+        "direction": "horizontal"
+      },
+      {
+        "word": "BARN",
+        "x": 4,
+        "y": 3,
+        "direction": "vertical"
+      },
+      {
+        "word": "ARCH",
+        "x": 1,
+        "y": 1,
+        "direction": "horizontal"
+      }
+    ],
+    "bonusWords": [
+      "BRAN",
+      "CHAR"
+    ]
+  },
+  {
+    "id": 14,
+    "difficulty": "Medium",
+    "letters": [
+      "M",
+      "A",
+      "R",
+      "K",
+      "E",
+      "T"
+    ],
+    "words": [
+      {
+        "word": "MARKET",
+        "x": 1,
+        "y": 0,
+        "direction": "horizontal"
+      },
+      {
+        "word": "MAKER",
+        "x": 1,
+        "y": 0,
+        "direction": "vertical"
+      },
+      {
+        "word": "TEAM",
         "x": 0,
         "y": 3,
         "direction": "horizontal"
       },
       {
-        "word": "RIND",
-        "x": 0,
+        "word": "TAKE",
+        "x": 6,
         "y": 0,
         "direction": "vertical"
+      },
+      {
+        "word": "MAKE",
+        "x": 3,
+        "y": 3,
+        "direction": "horizontal"
       }
     ],
     "bonusWords": [
-      "KIND",
-      "INK",
-      "KID",
-      "RID"
+      "MARK",
+      "RATE",
+      "TEAR",
+      "MEAT"
     ]
   },
   {
-    "id": 33,
+    "id": 15,
     "difficulty": "Medium",
     "letters": [
-      "D",
-      "R",
-      "I",
-      "V",
+      "C",
+      "A",
+      "S",
+      "T",
+      "L",
       "E"
     ],
     "words": [
       {
-        "word": "DRIVE",
+        "word": "CASTLE",
         "x": 0,
         "y": 0,
         "direction": "horizontal"
       },
       {
-        "word": "DIVER",
+        "word": "STALE",
+        "x": 2,
+        "y": 0,
+        "direction": "vertical"
+      },
+      {
+        "word": "LATE",
+        "x": 2,
+        "y": 3,
+        "direction": "horizontal"
+      },
+      {
+        "word": "TALES",
+        "x": 4,
+        "y": 3,
+        "direction": "vertical"
+      },
+      {
+        "word": "CATS",
         "x": 0,
         "y": 0,
         "direction": "vertical"
       }
     ],
     "bonusWords": [
-      "RIDE",
-      "DIVE",
-      "RED",
-      "RID"
+      "TALE",
+      "SALE",
+      "SEAT",
+      "EAST"
     ]
   },
   {
-    "id": 34,
-    "difficulty": "Medium",
+    "id": 16,
+    "difficulty": "Hard",
     "letters": [
-      "E",
-      "M",
       "P",
+      "I",
+      "C",
       "T",
-      "Y"
+      "U",
+      "R",
+      "E"
     ],
     "words": [
       {
-        "word": "EMPTY",
+        "word": "PICTURE",
+        "x": 0,
+        "y": 0,
+        "direction": "horizontal"
+      },
+      {
+        "word": "PRICE",
+        "x": 0,
+        "y": 0,
+        "direction": "vertical"
+      },
+      {
+        "word": "CURE",
         "x": 0,
         "y": 3,
         "direction": "horizontal"
       },
       {
-        "word": "TYPE",
-        "x": 0,
+        "word": "TRUE",
+        "x": 3,
         "y": 0,
         "direction": "vertical"
-      }
-    ],
-    "bonusWords": [
-      "YET",
-      "PET",
-      "MET"
-    ]
-  },
-  {
-    "id": 35,
-    "difficulty": "Medium",
-    "letters": [
-      "E",
-      "Q",
-      "U",
-      "A",
-      "L"
-    ],
-    "words": [
-      {
-        "word": "EQUAL",
-        "x": 0,
-        "y": 0,
-        "direction": "horizontal"
-      }
-    ],
-    "bonusWords": []
-  },
-  {
-    "id": 36,
-    "difficulty": "Medium",
-    "letters": [
-      "F",
-      "A",
-      "U",
-      "L",
-      "T"
-    ],
-    "words": [
-      {
-        "word": "FAULT",
-        "x": 0,
-        "y": 0,
-        "direction": "horizontal"
       },
       {
-        "word": "FLAT",
-        "x": 0,
+        "word": "EPIC",
+        "x": 6,
         "y": 0,
         "direction": "vertical"
       }
     ],
     "bonusWords": [
-      "FAT"
+      "PURE",
+      "RICE",
+      "TRIP",
+      "CUP"
     ]
   },
   {
-    "id": 37,
-    "difficulty": "Medium",
-    "letters": [
-      "F",
-      "I",
-      "E",
-      "L",
-      "D"
-    ],
-    "words": [
-      {
-        "word": "FIELD",
-        "x": 0,
-        "y": 0,
-        "direction": "horizontal"
-      },
-      {
-        "word": "FILE",
-        "x": 0,
-        "y": 0,
-        "direction": "vertical"
-      }
-    ],
-    "bonusWords": [
-      "LIFE",
-      "FED",
-      "LED",
-      "LIE"
-    ]
-  },
-  {
-    "id": 38,
-    "difficulty": "Medium",
-    "letters": [
-      "F",
-      "I",
-      "G",
-      "H",
-      "T"
-    ],
-    "words": [
-      {
-        "word": "FIGHT",
-        "x": 0,
-        "y": 2,
-        "direction": "horizontal"
-      },
-      {
-        "word": "GIFT",
-        "x": 0,
-        "y": 0,
-        "direction": "vertical"
-      }
-    ],
-    "bonusWords": [
-      "FIG",
-      "FIT",
-      "HIT"
-    ]
-  },
-  {
-    "id": 39,
-    "difficulty": "Medium",
-    "letters": [
-      "F",
-      "I",
-      "N",
-      "A",
-      "L"
-    ],
-    "words": [
-      {
-        "word": "FINAL",
-        "x": 0,
-        "y": 2,
-        "direction": "horizontal"
-      },
-      {
-        "word": "NAIL",
-        "x": 1,
-        "y": 0,
-        "direction": "vertical"
-      }
-    ],
-    "bonusWords": [
-      "FAIL",
-      "FAN",
-      "FIN"
-    ]
-  },
-  {
-    "id": 40,
-    "difficulty": "Medium",
-    "letters": [
-      "F",
-      "I",
-      "R",
-      "S",
-      "T"
-    ],
-    "words": [
-      {
-        "word": "FIRST",
-        "x": 0,
-        "y": 1,
-        "direction": "horizontal"
-      },
-      {
-        "word": "RITS",
-        "x": 1,
-        "y": 0,
-        "direction": "vertical"
-      }
-    ],
-    "bonusWords": [
-      "FITS",
-      "SIT",
-      "FIT",
-      "SIR"
-    ]
-  },
-  {
-    "id": 41,
+    "id": 17,
     "difficulty": "Hard",
     "letters": [
-      "F",
-      "L",
-      "O",
-      "O",
+      "M",
+      "A",
+      "C",
+      "H",
+      "I",
+      "N",
+      "E"
+    ],
+    "words": [
+      {
+        "word": "MACHINE",
+        "x": 0,
+        "y": 0,
+        "direction": "horizontal"
+      },
+      {
+        "word": "MINCE",
+        "x": 0,
+        "y": 0,
+        "direction": "vertical"
+      },
+      {
+        "word": "CHAIN",
+        "x": 0,
+        "y": 3,
+        "direction": "horizontal"
+      },
+      {
+        "word": "ACHE",
+        "x": 2,
+        "y": 3,
+        "direction": "vertical"
+      },
+      {
+        "word": "NICE",
+        "x": 5,
+        "y": 0,
+        "direction": "vertical"
+      }
+    ],
+    "bonusWords": [
+      "MICE",
+      "CHIN",
+      "NAME",
+      "MINE"
+    ]
+  },
+  {
+    "id": 18,
+    "difficulty": "Hard",
+    "letters": [
+      "T",
+      "E",
+      "A",
+      "C",
+      "H",
+      "E",
       "R"
     ],
     "words": [
       {
-        "word": "FLOOR",
+        "word": "TEACHER",
         "x": 0,
         "y": 0,
         "direction": "horizontal"
       },
       {
-        "word": "FOOL",
+        "word": "THREE",
         "x": 0,
         "y": 0,
         "direction": "vertical"
-      }
-    ],
-    "bonusWords": [
-      "ROOF",
-      "FOR"
-    ]
-  },
-  {
-    "id": 42,
-    "difficulty": "Hard",
-    "letters": [
-      "F",
-      "O",
-      "R",
-      "C",
-      "E"
-    ],
-    "words": [
-      {
-        "word": "FORCE",
-        "x": 0,
-        "y": 1,
-        "direction": "horizontal"
       },
       {
-        "word": "CORE",
-        "x": 1,
-        "y": 0,
-        "direction": "vertical"
-      }
-    ],
-    "bonusWords": [
-      "FOR"
-    ]
-  },
-  {
-    "id": 43,
-    "difficulty": "Hard",
-    "letters": [
-      "F",
-      "R",
-      "A",
-      "M",
-      "E"
-    ],
-    "words": [
-      {
-        "word": "FRAME",
-        "x": 0,
-        "y": 0,
-        "direction": "horizontal"
-      },
-      {
-        "word": "FARM",
-        "x": 0,
-        "y": 0,
-        "direction": "vertical"
-      }
-    ],
-    "bonusWords": [
-      "FEAR",
-      "FARE",
-      "ARM",
-      "EAR",
-      "ARE"
-    ]
-  },
-  {
-    "id": 44,
-    "difficulty": "Hard",
-    "letters": [
-      "F",
-      "R",
-      "O",
-      "N",
-      "T"
-    ],
-    "words": [
-      {
-        "word": "FRONT",
-        "x": 0,
-        "y": 0,
-        "direction": "horizontal"
-      },
-      {
-        "word": "FONT",
-        "x": 0,
-        "y": 0,
-        "direction": "vertical"
-      }
-    ],
-    "bonusWords": [
-      "FORT",
-      "TORN",
-      "FOR",
-      "NOT",
-      "TON",
-      "ROT"
-    ]
-  },
-  {
-    "id": 45,
-    "difficulty": "Hard",
-    "letters": [
-      "F",
-      "R",
-      "U",
-      "I",
-      "T"
-    ],
-    "words": [
-      {
-        "word": "FRUIT",
-        "x": 0,
-        "y": 0,
-        "direction": "horizontal"
-      }
-    ],
-    "bonusWords": []
-  },
-  {
-    "id": 46,
-    "difficulty": "Hard",
-    "letters": [
-      "G",
-      "L",
-      "A",
-      "S",
-      "S"
-    ],
-    "words": [
-      {
-        "word": "GLASS",
-        "x": 0,
-        "y": 0,
-        "direction": "horizontal"
-      },
-      {
-        "word": "LASS",
-        "x": 1,
-        "y": 0,
-        "direction": "vertical"
-      }
-    ],
-    "bonusWords": [
-      "GAS",
-      "ASS"
-    ]
-  },
-  {
-    "id": 47,
-    "difficulty": "Hard",
-    "letters": [
-      "G",
-      "R",
-      "A",
-      "N",
-      "T"
-    ],
-    "words": [
-      {
-        "word": "GRANT",
-        "x": 0,
-        "y": 0,
-        "direction": "horizontal"
-      },
-      {
-        "word": "RANT",
-        "x": 1,
-        "y": 0,
-        "direction": "vertical"
-      }
-    ],
-    "bonusWords": [
-      "ART",
-      "ANT",
-      "RAN",
-      "TAR",
-      "RAT"
-    ]
-  },
-  {
-    "id": 48,
-    "difficulty": "Hard",
-    "letters": [
-      "G",
-      "R",
-      "A",
-      "S",
-      "S"
-    ],
-    "words": [
-      {
-        "word": "GRASS",
-        "x": 0,
-        "y": 2,
-        "direction": "horizontal"
-      },
-      {
-        "word": "RAGS",
-        "x": 0,
-        "y": 0,
-        "direction": "vertical"
-      }
-    ],
-    "bonusWords": [
-      "GAS",
-      "ASS",
-      "RAG"
-    ]
-  },
-  {
-    "id": 49,
-    "difficulty": "Hard",
-    "letters": [
-      "G",
-      "R",
-      "E",
-      "E",
-      "N"
-    ],
-    "words": [
-      {
-        "word": "GREEN",
-        "x": 0,
-        "y": 0,
-        "direction": "horizontal"
-      },
-      {
-        "word": "GENRE",
-        "x": 0,
-        "y": 0,
-        "direction": "vertical"
-      }
-    ],
-    "bonusWords": [
-      "GENE"
-    ]
-  },
-  {
-    "id": 50,
-    "difficulty": "Hard",
-    "letters": [
-      "G",
-      "R",
-      "O",
-      "U",
-      "P"
-    ],
-    "words": [
-      {
-        "word": "GROUP",
+        "word": "EARTH",
         "x": 0,
         "y": 3,
         "direction": "horizontal"
       },
       {
-        "word": "POUR",
-        "x": 1,
+        "word": "CHAT",
+        "x": 3,
+        "y": 0,
+        "direction": "vertical"
+      },
+      {
+        "word": "RATE",
+        "x": 6,
         "y": 0,
         "direction": "vertical"
       }
     ],
     "bonusWords": [
-      "OUR",
-      "PRO",
-      "PUG"
+      "TEACH",
+      "CHEAT",
+      "HEART",
+      "REACH",
+      "THERE"
+    ]
+  },
+  {
+    "id": 19,
+    "difficulty": "Hard",
+    "letters": [
+      "M",
+      "O",
+      "R",
+      "N",
+      "I",
+      "N",
+      "G"
+    ],
+    "words": [
+      {
+        "word": "MORNING",
+        "x": 0,
+        "y": 0,
+        "direction": "horizontal"
+      },
+      {
+        "word": "MINOR",
+        "x": 0,
+        "y": 0,
+        "direction": "vertical"
+      },
+      {
+        "word": "RING",
+        "x": 0,
+        "y": 4,
+        "direction": "horizontal"
+      },
+      {
+        "word": "IRON",
+        "x": 1,
+        "y": 4,
+        "direction": "vertical"
+      },
+      {
+        "word": "NORM",
+        "x": 3,
+        "y": 0,
+        "direction": "vertical"
+      }
+    ],
+    "bonusWords": [
+      "IRONING",
+      "GRIN",
+      "RING"
+    ]
+  },
+  {
+    "id": 20,
+    "difficulty": "Hard",
+    "letters": [
+      "P",
+      "A",
+      "I",
+      "N",
+      "T",
+      "E",
+      "R"
+    ],
+    "words": [
+      {
+        "word": "PAINTER",
+        "x": 0,
+        "y": 0,
+        "direction": "horizontal"
+      },
+      {
+        "word": "PRINT",
+        "x": 0,
+        "y": 0,
+        "direction": "vertical"
+      },
+      {
+        "word": "TRAIN",
+        "x": 0,
+        "y": 4,
+        "direction": "horizontal"
+      },
+      {
+        "word": "NEAR",
+        "x": 4,
+        "y": 4,
+        "direction": "vertical"
+      },
+      {
+        "word": "RENT",
+        "x": 6,
+        "y": 0,
+        "direction": "vertical"
+      }
+    ],
+    "bonusWords": [
+      "PAINT",
+      "RAIN",
+      "PART",
+      "RATE"
     ]
   }
 ];
-
-export const DAILY_PUZZLES: Record<string, Level> = {
-  '2026-03-15': {
-    id: 9991,
-    difficulty: 'Hard',
-    letters: ['S', 'P', 'R', 'I', 'N', 'G'],
-    words: [
-      { word: 'SPRING', x: 0, y: 0, direction: 'horizontal' },
-      { word: 'RING', x: 2, y: 0, direction: 'vertical' },
-      { word: 'PIG', x: 1, y: 0, direction: 'vertical' },
-      { word: 'SIGN', x: 0, y: 0, direction: 'vertical' },
-      { word: 'GRIN', x: 0, y: 3, direction: 'horizontal' },
-    ],
-    bonusWords: ['SPIN', 'RIG', 'SIR', 'NIP', 'PIN'],
-  }
-};

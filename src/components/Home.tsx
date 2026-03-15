@@ -30,7 +30,7 @@ export const Home = ({ onPlay, onDaily }: { onPlay: () => void; onDaily: () => v
   };
 
   const handleDifficultySelect = (diff: 'Easy' | 'Medium' | 'Hard') => {
-    const { selectedDifficulty, currentLevelId } = useGameStore.getState();
+    const { selectedDifficulty, currentLevelId, playedLevels } = useGameStore.getState();
     const currentLevel = LEVELS.find(l => l.id === currentLevelId);
     
     setDifficulty(diff);
@@ -42,8 +42,12 @@ export const Home = ({ onPlay, onDaily }: { onPlay: () => void; onDaily: () => v
       // Find levels of this difficulty
       const diffLevels = LEVELS.filter(l => l.difficulty === diff || (diff === 'Easy' && l.difficulty === 'Beginner'));
       if (diffLevels.length > 0) {
-        // Pick a random level of this difficulty
-        const randomLevel = diffLevels[Math.floor(Math.random() * diffLevels.length)];
+        let unplayedLevels = diffLevels.filter(l => !playedLevels.includes(l.id));
+        if (unplayedLevels.length === 0) {
+          unplayedLevels = diffLevels;
+        }
+        // Pick a random unplayed level
+        const randomLevel = unplayedLevels[Math.floor(Math.random() * unplayedLevels.length)];
         loadLevel(randomLevel.id);
       }
     }

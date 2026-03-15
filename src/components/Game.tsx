@@ -76,17 +76,29 @@ export const Game = ({ onBack }: { onBack: () => void }) => {
   const handleNextLevel = () => {
     setShowLevelComplete(false);
     setWordMeanings([]);
-    const { selectedDifficulty } = useGameStore.getState();
+    const { selectedDifficulty, playedLevels } = useGameStore.getState();
     
     if (selectedDifficulty) {
       const diffLevels = LEVELS.filter(l => l.difficulty === selectedDifficulty || (selectedDifficulty === 'Easy' && l.difficulty === 'Beginner'));
       if (diffLevels.length > 0) {
-        // Pick a random level of this difficulty that is not the current one (if possible)
-        let nextLevel = diffLevels[Math.floor(Math.random() * diffLevels.length)];
-        if (diffLevels.length > 1 && nextLevel.id === currentLevelId) {
-          const otherLevels = diffLevels.filter(l => l.id !== currentLevelId);
+        // Find levels of this difficulty that haven't been played yet
+        let unplayedLevels = diffLevels.filter(l => !playedLevels.includes(l.id));
+        
+        // If all levels of this difficulty have been played, reset the played history for this difficulty
+        if (unplayedLevels.length === 0) {
+          unplayedLevels = diffLevels;
+          // Note: We could clear them from playedLevels, but for simplicity we just pick from all of them
+        }
+        
+        // Pick a random unplayed level
+        let nextLevel = unplayedLevels[Math.floor(Math.random() * unplayedLevels.length)];
+        
+        // Ensure we don't pick the exact same level if there are other options
+        if (unplayedLevels.length > 1 && nextLevel.id === currentLevelId) {
+          const otherLevels = unplayedLevels.filter(l => l.id !== currentLevelId);
           nextLevel = otherLevels[Math.floor(Math.random() * otherLevels.length)];
         }
+        
         loadLevel(nextLevel.id);
         return;
       }
