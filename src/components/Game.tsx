@@ -53,6 +53,23 @@ export const Game = ({ onBack }: { onBack: () => void }) => {
 
   const handleNextLevel = () => {
     setShowLevelComplete(false);
+    const { selectedDifficulty } = useGameStore.getState();
+    
+    if (selectedDifficulty) {
+      const diffLevels = LEVELS.filter(l => l.difficulty === selectedDifficulty || (selectedDifficulty === 'Easy' && l.difficulty === 'Beginner'));
+      if (diffLevels.length > 0) {
+        // Pick a random level of this difficulty that is not the current one (if possible)
+        let nextLevel = diffLevels[Math.floor(Math.random() * diffLevels.length)];
+        if (diffLevels.length > 1 && nextLevel.id === currentLevelId) {
+          const otherLevels = diffLevels.filter(l => l.id !== currentLevelId);
+          nextLevel = otherLevels[Math.floor(Math.random() * otherLevels.length)];
+        }
+        loadLevel(nextLevel.id);
+        return;
+      }
+    }
+    
+    // Fallback to sequential
     loadLevel(currentLevelId + 1);
   };
 

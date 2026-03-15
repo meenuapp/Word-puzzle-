@@ -9,6 +9,7 @@ interface GameStore extends GameState {
   soundEnabled: boolean;
   // Actions
   loadLevel: (levelId: number) => void;
+  setDifficulty: (difficulty: 'Easy' | 'Medium' | 'Hard' | null) => void;
   submitWord: (word: string) => 'valid' | 'bonus' | 'already_found' | 'invalid';
   useHint: (type: 'reveal_letter' | 'reveal_word' | 'shuffle') => boolean;
   addCoins: (amount: number) => void;
@@ -22,6 +23,7 @@ interface GameStore extends GameState {
 
 const INITIAL_STATE: GameState = {
   currentLevelId: 1,
+  selectedDifficulty: null,
   coins: 200,
   hints: 5,
   score: 0,
@@ -48,6 +50,11 @@ export const useGameStore = create<GameStore>()(
           bonusWordsFound: [],
           revealedCells: [],
         });
+        get().syncToCloud();
+      },
+
+      setDifficulty: (difficulty) => {
+        set({ selectedDifficulty: difficulty });
         get().syncToCloud();
       },
 
@@ -82,7 +89,7 @@ export const useGameStore = create<GameStore>()(
           // Check if level completed
           if (get().wordsFound.length === level.words.length) {
             set((s) => ({
-              levelsCompleted: Math.max(s.levelsCompleted, s.currentLevelId),
+              levelsCompleted: s.levelsCompleted + 1,
             }));
           }
           
@@ -198,6 +205,7 @@ export const useGameStore = create<GameStore>()(
           await setDoc(doc(db, 'users', user.uid), {
             uid: user.uid,
             currentLevelId: state.currentLevelId,
+            selectedDifficulty: state.selectedDifficulty,
             coins: state.coins,
             hints: state.hints,
             score: state.score,
@@ -221,6 +229,7 @@ export const useGameStore = create<GameStore>()(
             const data = docSnap.data();
             set({
               currentLevelId: data.currentLevelId ?? 1,
+              selectedDifficulty: data.selectedDifficulty ?? null,
               coins: data.coins ?? 200,
               hints: data.hints ?? 5,
               score: data.score ?? 0,

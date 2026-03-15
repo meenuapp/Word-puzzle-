@@ -23,6 +23,7 @@ export interface Cell {
 
 export interface GameState {
   currentLevelId: number;
+  selectedDifficulty: 'Easy' | 'Medium' | 'Hard' | null;
   coins: number;
   hints: number;
   score: number;

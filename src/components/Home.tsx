@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useGameStore } from '../store/gameStore';
-import { motion } from 'motion/react';
-import { Play, Calendar, Trophy, LogIn, LogOut, Coins, Volume2, VolumeX } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
+import { Play, Calendar, Trophy, LogIn, LogOut, Coins, Volume2, VolumeX, ArrowLeft } from 'lucide-react';
 import { auth } from '../firebase';
 import { signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from 'firebase/auth';
+import { LEVELS } from '../data/levels';
 
 export const Home = ({ onPlay, onDaily }: { onPlay: () => void; onDaily: () => void }) => {
-  const { currentLevelId, coins, score, levelsCompleted, checkDailyLogin, dailyStreak, soundEnabled, toggleSound } = useGameStore();
+  const { currentLevelId, coins, score, levelsCompleted, checkDailyLogin, dailyStreak, soundEnabled, toggleSound, setDifficulty, loadLevel } = useGameStore();
   const [user, setUser] = useState(auth.currentUser);
+  const [showDifficultySelect, setShowDifficultySelect] = useState(false);
 
   useEffect(() => {
     checkDailyLogin();
@@ -22,6 +24,27 @@ export const Home = ({ onPlay, onDaily }: { onPlay: () => void; onDaily: () => v
     } catch (error) {
       console.error('Login failed', error);
     }
+  };
+
+  const handleDifficultySelect = (diff: 'Easy' | 'Medium' | 'Hard') => {
+    const { selectedDifficulty, currentLevelId } = useGameStore.getState();
+    const currentLevel = LEVELS.find(l => l.id === currentLevelId);
+    
+    setDifficulty(diff);
+    
+    // If they picked the same difficulty and the current level matches it, just resume
+    const matchesDiff = currentLevel && (currentLevel.difficulty === diff || (diff === 'Easy' && currentLevel.difficulty === 'Beginner'));
+    
+    if (!matchesDiff || selectedDifficulty !== diff) {
+      // Find levels of this difficulty
+      const diffLevels = LEVELS.filter(l => l.difficulty === diff || (diff === 'Easy' && l.difficulty === 'Beginner'));
+      if (diffLevels.length > 0) {
+        // Pick a random level of this difficulty
+        const randomLevel = diffLevels[Math.floor(Math.random() * diffLevels.length)];
+        loadLevel(randomLevel.id);
+      }
+    }
+    onPlay();
   };
 
   return (
@@ -54,46 +77,102 @@ export const Home = ({ onPlay, onDaily }: { onPlay: () => void; onDaily: () => v
       </div>
 
       {/* Hero Section */}
-      <div className="flex-1 flex flex-col items-center justify-center mb-12">
-        <motion.div
-          initial={{ scale: 0.9, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 0.5, type: 'spring' }}
-          className="relative w-48 h-48 mb-8 flex items-center justify-center"
-        >
-          <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500 to-purple-500 rounded-full blur-2xl opacity-50 animate-pulse"></div>
-          <div className="relative z-10 w-full h-full bg-white/10 backdrop-blur-md rounded-full border border-white/20 flex flex-col items-center justify-center shadow-2xl">
-            <span className="text-5xl font-black tracking-tighter bg-clip-text text-transparent bg-gradient-to-b from-white to-white/70">
-              WORD
-            </span>
-            <span className="text-3xl font-bold tracking-widest text-yellow-400 mt-1">
-              PUZZLE
-            </span>
-          </div>
-        </motion.div>
+      <div className="flex-1 flex flex-col items-center justify-center mb-12 relative">
+        <AnimatePresence mode="wait">
+          {!showDifficultySelect ? (
+            <motion.div
+              key="main-menu"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              className="flex flex-col items-center justify-center w-full"
+            >
+              <motion.div
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ duration: 0.5, type: 'spring' }}
+                className="relative w-48 h-48 mb-8 flex items-center justify-center"
+              >
+                <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500 to-purple-500 rounded-full blur-2xl opacity-50 animate-pulse"></div>
+                <div className="relative z-10 w-full h-full bg-white/10 backdrop-blur-md rounded-full border border-white/20 flex flex-col items-center justify-center shadow-2xl">
+                  <span className="text-5xl font-black tracking-tighter bg-clip-text text-transparent bg-gradient-to-b from-white to-white/70">
+                    WORD
+                  </span>
+                  <span className="text-3xl font-bold tracking-widest text-yellow-400 mt-1">
+                    PUZZLE
+                  </span>
+                </div>
+              </motion.div>
 
-        <div className="flex items-center gap-4 mb-8">
-          <div className="flex flex-col items-center bg-black/20 px-6 py-3 rounded-2xl backdrop-blur-sm">
-            <span className="text-sm font-medium opacity-70 mb-1">Level</span>
-            <span className="text-2xl font-bold">{currentLevelId}</span>
-          </div>
-          <div className="flex flex-col items-center bg-black/20 px-6 py-3 rounded-2xl backdrop-blur-sm">
-            <span className="text-sm font-medium opacity-70 mb-1">Score</span>
-            <span className="text-2xl font-bold">{score}</span>
-          </div>
-        </div>
+              <div className="flex items-center gap-4 mb-8">
+                <div className="flex flex-col items-center bg-black/20 px-6 py-3 rounded-2xl backdrop-blur-sm">
+                  <span className="text-sm font-medium opacity-70 mb-1">Level</span>
+                  <span className="text-2xl font-bold">{currentLevelId}</span>
+                </div>
+                <div className="flex flex-col items-center bg-black/20 px-6 py-3 rounded-2xl backdrop-blur-sm">
+                  <span className="text-sm font-medium opacity-70 mb-1">Score</span>
+                  <span className="text-2xl font-bold">{score}</span>
+                </div>
+              </div>
 
-        {/* Play Button */}
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={onPlay}
-          className="w-full max-w-xs py-5 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full font-black text-2xl text-slate-900 shadow-xl shadow-orange-500/30 flex items-center justify-center gap-3 relative overflow-hidden group"
-        >
-          <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
-          <Play size={28} className="fill-slate-900" />
-          <span>PLAY</span>
-        </motion.button>
+              {/* Play Button */}
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setShowDifficultySelect(true)}
+                className="w-full max-w-xs py-5 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full font-black text-2xl text-slate-900 shadow-xl shadow-orange-500/30 flex items-center justify-center gap-3 relative overflow-hidden group"
+              >
+                <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
+                <Play size={28} className="fill-slate-900" />
+                <span>PLAY</span>
+              </motion.button>
+            </motion.div>
+          ) : (
+            <motion.div
+              key="difficulty-select"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 20 }}
+              className="flex flex-col items-center justify-center w-full"
+            >
+              <button 
+                onClick={() => setShowDifficultySelect(false)}
+                className="self-start mb-8 p-2 bg-black/20 rounded-full hover:bg-black/30 transition-colors"
+              >
+                <ArrowLeft size={24} />
+              </button>
+              
+              <h2 className="text-3xl font-black mb-8 tracking-wider">SELECT DIFFICULTY</h2>
+              
+              <div className="flex flex-col gap-4 w-full max-w-xs">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => handleDifficultySelect('Easy')}
+                  className="w-full py-4 bg-gradient-to-r from-emerald-400 to-teal-500 rounded-2xl font-bold text-xl text-white shadow-lg shadow-teal-500/30"
+                >
+                  EASY
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => handleDifficultySelect('Medium')}
+                  className="w-full py-4 bg-gradient-to-r from-blue-400 to-indigo-500 rounded-2xl font-bold text-xl text-white shadow-lg shadow-indigo-500/30"
+                >
+                  MEDIUM
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => handleDifficultySelect('Hard')}
+                  className="w-full py-4 bg-gradient-to-r from-rose-400 to-red-500 rounded-2xl font-bold text-xl text-white shadow-lg shadow-red-500/30"
+                >
+                  HARD
+                </motion.button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
       {/* Bottom Menu */}
