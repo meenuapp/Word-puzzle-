@@ -1,0 +1,60 @@
+{
+  "entities": {
+    "UserProgress": {
+      "title": "UserProgress",
+      "description": "Stores the player's game progress and statistics.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "description": "The user's unique ID."
+        },
+        "currentLevelId": {
+          "type": "number",
+          "description": "The highest level reached."
+        },
+        "coins": {
+          "type": "number",
+          "description": "The user's coin balance."
+        },
+        "hints": {
+          "type": "number",
+          "description": "The user's hint balance."
+        },
+        "score": {
+          "type": "number",
+          "description": "The user's total score."
+        },
+        "dailyStreak": {
+          "type": "number",
+          "description": "The user's consecutive daily login streak."
+        },
+        "lastLoginDate": {
+          "type": "string",
+          "description": "The date of the user's last login (YYYY-MM-DD)."
+        },
+        "levelsCompleted": {
+          "type": "number",
+          "description": "The total number of levels completed."
+        },
+        "totalPlayTime": {
+          "type": "number",
+          "description": "Total play time in seconds."
+        },
+        "updatedAt": {
+          "type": "timestamp",
+          "description": "The timestamp of the last update."
+        }
+      },
+      "required": ["uid", "currentLevelId", "coins", "hints", "score", "dailyStreak", "levelsCompleted", "totalPlayTime", "updatedAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": {
+        "$ref": "#/entities/UserProgress"
+      },
+      "description": "Stores user progress documents."
+    }
+  }
+}

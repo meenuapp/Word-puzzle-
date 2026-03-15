@@ -1,0 +1,5 @@
+{
+  "name": "Word Puzzle Game",
+  "description": "A single-player word puzzle game with crossword grids, letter wheels, and daily challenges.",
+  "requestFramePermissions": []
+}

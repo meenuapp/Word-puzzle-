@@ -1,0 +1,77 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // ===============================================================
+    // Assumed Data Model
+    // ===============================================================
+    //
+    // Collection: users
+    // Document ID: {userId}
+    // Fields:
+    //   - uid: string (required) - The user's unique ID. Immutable.
+    //   - currentLevelId: number (required) - The highest level reached.
+    //   - coins: number (required) - The user's coin balance.
+    //   - hints: number (required) - The user's hint balance.
+    //   - score: number (required) - The user's total score.
+    //   - dailyStreak: number (required) - The user's consecutive daily login streak.
+    //   - lastLoginDate: string (optional) - The date of the user's last login (YYYY-MM-DD).
+    //   - levelsCompleted: number (required) - The total number of levels completed.
+    //   - totalPlayTime: number (required) - Total play time in seconds.
+    //   - updatedAt: timestamp (required) - The timestamp of the last update.
+    //
+    // ===============================================================
+    
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+    
+    function uidUnchanged() {
+      return !('uid' in request.resource.data) || request.resource.data.uid == request.auth.uid;
+    }
+    
+    function uidNotModified() {
+      return !('uid' in request.resource.data) || request.resource.data.uid == resource.data.uid;
+    }
+    
+    function hasRequiredFields(fields) {
+      return request.resource.data.keys().hasAll(fields);
+    }
+    
+    function hasOnlyAllowedFields(fields) {
+      return request.resource.data.keys().hasOnly(fields);
+    }
+    
+    function isValidDateString(dateStr) {
+      return dateStr is string && dateStr.matches("^\\d{4}-\\d{2}-\\d{2}$");
+    }
+    
+    function isValidUserProgress(data) {
+      return hasOnlyAllowedFields(['uid', 'currentLevelId', 'coins', 'hints', 'score', 'dailyStreak', 'lastLoginDate', 'levelsCompleted', 'totalPlayTime', 'updatedAt']) &&
+             hasRequiredFields(['uid', 'currentLevelId', 'coins', 'hints', 'score', 'dailyStreak', 'levelsCompleted', 'totalPlayTime', 'updatedAt']) &&
+             data.uid is string && data.uid.size() > 0 && data.uid.size() < 100 &&
+             data.currentLevelId is number && data.currentLevelId >= 1 &&
+             data.coins is number && data.coins >= 0 &&
+             data.hints is number && data.hints >= 0 &&
+             data.score is number && data.score >= 0 &&
+             data.dailyStreak is number && data.dailyStreak >= 0 &&
+             data.levelsCompleted is number && data.levelsCompleted >= 0 &&
+             data.totalPlayTime is number && data.totalPlayTime >= 0 &&
+             data.updatedAt is timestamp &&
+             (!('lastLoginDate' in data) || isValidDateString(data.lastLoginDate));
+    }
+
+    match /users/{userId} {
+      allow read: if isOwner(userId);
+      allow create: if isOwner(userId) && isValidUserProgress(request.resource.data) && uidUnchanged();
+      allow update: if isOwner(userId) && isValidUserProgress(request.resource.data) && uidNotModified();
+      allow delete: if isOwner(userId);
+    }
+  }
+}
