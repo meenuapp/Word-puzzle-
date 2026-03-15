@@ -13,6 +13,7 @@ export const Game = ({ onBack }: { onBack: () => void }) => {
   const [feedback, setFeedback] = useState<{ text: string; type: 'success' | 'error' | 'bonus' } | null>(null);
   const [showLevelComplete, setShowLevelComplete] = useState(false);
   const [floatingScores, setFloatingScores] = useState<{ id: number; score: number; x: number; y: number }[]>([]);
+  const [wordMeanings, setWordMeanings] = useState<{ word: string; meaning: string }[]>([]);
 
   useEffect(() => {
     if (level && wordsFound.length === level.words.length) {
@@ -22,6 +23,27 @@ export const Game = ({ onBack }: { onBack: () => void }) => {
         spread: 70,
         origin: { y: 0.6 }
       });
+      
+      const fetchMeanings = async () => {
+        const meanings = await Promise.all(
+          level.words.map(async (w) => {
+            try {
+              const res = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${w.word}`);
+              if (res.ok) {
+                const data = await res.json();
+                const meaning = data[0]?.meanings[0]?.definitions[0]?.definition || 'Meaning not found.';
+                return { word: w.word, meaning };
+              }
+            } catch (e) {
+              console.error(e);
+            }
+            return { word: w.word, meaning: 'Meaning not available.' };
+          })
+        );
+        setWordMeanings(meanings);
+      };
+      
+      fetchMeanings();
       setTimeout(() => setShowLevelComplete(true), 1000);
     }
   }, [wordsFound, level]);
@@ -53,6 +75,7 @@ export const Game = ({ onBack }: { onBack: () => void }) => {
 
   const handleNextLevel = () => {
     setShowLevelComplete(false);
+    setWordMeanings([]);
     const { selectedDifficulty } = useGameStore.getState();
     
     if (selectedDifficulty) {
@@ -200,7 +223,7 @@ export const Game = ({ onBack }: { onBack: () => void }) => {
               <h2 className="text-3xl font-bold text-slate-800 mb-2">Level Cleared!</h2>
               <p className="text-slate-500 mb-6 font-medium">You found all the words.</p>
               
-              <div className="flex items-center justify-center gap-4 mb-8 w-full">
+              <div className="flex items-center justify-center gap-4 mb-6 w-full">
                 <div className="flex flex-col items-center bg-slate-50 p-4 rounded-2xl flex-1">
                   <span className="text-sm text-slate-400 font-medium mb-1">Score</span>
                   <span className="text-2xl font-bold text-indigo-600">{score}</span>
@@ -212,6 +235,20 @@ export const Game = ({ onBack }: { onBack: () => void }) => {
                   </div>
                 </div>
               </div>
+
+              {wordMeanings.length > 0 && (
+                <div className="w-full mb-6 max-h-40 overflow-y-auto text-left bg-slate-50 p-4 rounded-2xl">
+                  <h3 className="text-sm font-bold text-slate-600 mb-2 uppercase tracking-wider">Word Meanings</h3>
+                  <div className="flex flex-col gap-3">
+                    {wordMeanings.map((wm, idx) => (
+                      <div key={idx} className="text-sm">
+                        <span className="font-bold text-indigo-600 capitalize">{wm.word}: </span>
+                        <span className="text-slate-600">{wm.meaning}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               <button
                 onClick={handleNextLevel}

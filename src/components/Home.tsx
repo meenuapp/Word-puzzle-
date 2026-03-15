@@ -10,6 +10,7 @@ export const Home = ({ onPlay, onDaily }: { onPlay: () => void; onDaily: () => v
   const { currentLevelId, coins, score, levelsCompleted, checkDailyLogin, dailyStreak, soundEnabled, toggleSound, setDifficulty, loadLevel } = useGameStore();
   const [user, setUser] = useState(auth.currentUser);
   const [showDifficultySelect, setShowDifficultySelect] = useState(false);
+  const [loginError, setLoginError] = useState<string | null>(null);
 
   useEffect(() => {
     checkDailyLogin();
@@ -18,11 +19,13 @@ export const Home = ({ onPlay, onDaily }: { onPlay: () => void; onDaily: () => v
   }, [checkDailyLogin]);
 
   const handleLogin = async () => {
+    setLoginError(null);
     try {
       const provider = new GoogleAuthProvider();
       await signInWithPopup(auth, provider);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Login failed', error);
+      setLoginError(error.message || 'Failed to sign in. Please try again.');
     }
   };
 
@@ -75,6 +78,12 @@ export const Home = ({ onPlay, onDaily }: { onPlay: () => void; onDaily: () => v
           )}
         </div>
       </div>
+
+      {loginError && (
+        <div className="bg-red-500/80 text-white p-3 rounded-xl mb-4 text-sm text-center backdrop-blur-sm border border-red-400">
+          {loginError}
+        </div>
+      )}
 
       {/* Hero Section */}
       <div className="flex-1 flex flex-col items-center justify-center mb-12 relative">

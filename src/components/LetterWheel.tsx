@@ -16,12 +16,13 @@ export const LetterWheel = ({ onWordSubmit }: { onWordSubmit: (word: string) => 
 
   useEffect(() => {
     if (level) {
-      setLetters(level.letters);
+      const shuffledLetters = [...level.letters].sort(() => Math.random() - 0.5);
+      setLetters(shuffledLetters);
       // Calculate positions
       const radius = 80;
       const center = { x: 100, y: 100 };
-      const positions = level.letters.map((_, i) => {
-        const angle = (i / level.letters.length) * 2 * Math.PI - Math.PI / 2;
+      const positions = shuffledLetters.map((_, i) => {
+        const angle = (i / shuffledLetters.length) * 2 * Math.PI - Math.PI / 2;
         return {
           x: center.x + radius * Math.cos(angle),
           y: center.y + radius * Math.sin(angle),
