@@ -59,46 +59,54 @@ export default function App() {
 
   return (
     <SoundProvider>
-      <div className="w-full h-screen bg-slate-900 overflow-hidden overflow-x-hidden font-sans select-none touch-none">
-        {/* Background Theme */}
-        <div 
-          className="absolute inset-0 z-0 bg-cover bg-center transition-all duration-1000"
-          style={{
-            backgroundImage: `url('https://images.unsplash.com/photo-1511497584788-876760111969?q=80&w=1000&auto=format&fit=crop')`, // Forest theme
-            filter: 'brightness(0.4) saturate(1.2)'
-          }}
-        />
-        
-        <MagicalBackground />
+      <div className="w-full h-screen bg-slate-950 flex items-center justify-center">
+        {/* Mobile-like container */}
+        <div className="w-full h-full max-w-md bg-slate-900 shadow-2xl relative overflow-hidden overflow-x-hidden font-sans select-none touch-none">
+          {/* Background Theme */}
+          <div 
+            className="absolute inset-0 z-0 bg-cover bg-center transition-all duration-1000"
+            style={{
+              backgroundImage: `url('https://images.unsplash.com/photo-1511497584788-876760111969?q=80&w=1000&auto=format&fit=crop')`, // Forest theme
+              filter: 'brightness(0.4) saturate(1.2)'
+            }}
+          />
+          
+          <MagicalBackground />
 
-        {/* Audio */}
-        <audio ref={audioRef} loop preload="auto">
-          <source src="https://upload.wikimedia.org/wikipedia/commons/b/b4/Satie_-_Gymnop%C3%A9die_No._1.mp3" type="audio/mpeg" />
-        </audio>
+          {/* Audio */}
+          <audio ref={audioRef} loop preload="auto">
+            <source src="https://upload.wikimedia.org/wikipedia/commons/b/b4/Satie_-_Gymnop%C3%A9die_No._1.mp3" type="audio/mpeg" />
+          </audio>
+          
+          {/* Content */}
+          <div className="relative z-10 w-full h-full">
+            {currentScreen === 'home' && (
+              <Home 
+                onPlay={() => setCurrentScreen('game')} 
+                onDaily={() => setCurrentScreen('daily')} 
+              />
+            )}
+            {currentScreen === 'game' && (
+              <Game onBack={() => setCurrentScreen('home')} />
+            )}
+            {currentScreen === 'daily' && (
+              <div className="flex flex-col items-center justify-center h-full text-white p-6 text-center">
+                <h2 className="text-3xl font-bold mb-4">Daily Puzzle</h2>
+                <p className="mb-8 opacity-80">Come back tomorrow for a new challenge!</p>
+                <button 
+                  onClick={() => setCurrentScreen('home')}
+                  className="px-8 py-4 bg-white text-indigo-900 rounded-full font-bold shadow-xl"
+                >
+                  Back to Home
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
         
-        {/* Content */}
-        <div className="relative z-10 w-full h-full">
-          {currentScreen === 'home' && (
-            <Home 
-              onPlay={() => setCurrentScreen('game')} 
-              onDaily={() => setCurrentScreen('daily')} 
-            />
-          )}
-          {currentScreen === 'game' && (
-            <Game onBack={() => setCurrentScreen('home')} />
-          )}
-          {currentScreen === 'daily' && (
-            <div className="flex flex-col items-center justify-center h-full text-white p-6 text-center">
-              <h2 className="text-3xl font-bold mb-4">Daily Puzzle</h2>
-              <p className="mb-8 opacity-80">Come back tomorrow for a new challenge!</p>
-              <button 
-                onClick={() => setCurrentScreen('home')}
-                className="px-8 py-4 bg-white text-indigo-900 rounded-full font-bold shadow-xl"
-              >
-                Back to Home
-              </button>
-            </div>
-          )}
+        {/* Desktop message */}
+        <div className="hidden md:flex absolute inset-0 bg-slate-950/90 items-center justify-center text-white p-8 text-center z-[100]">
+          <p className="text-2xl font-bold">Please open on a mobile device for the best experience.</p>
         </div>
       </div>
     </SoundProvider>
