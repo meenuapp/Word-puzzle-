@@ -14,8 +14,37 @@ export const Game = ({ onBack }: { onBack: () => void }) => {
   const level = LEVELS.find((l) => l.id === currentLevelId);
   const [feedback, setFeedback] = useState<{ text: string; type: 'success' | 'error' | 'bonus' } | null>(null);
   const [showLevelComplete, setShowLevelComplete] = useState(false);
+  const [showMeanings, setShowMeanings] = useState(false);
   const [floatingScores, setFloatingScores] = useState<{ id: number; score: number; x: number; y: number }[]>([]);
   const [wordMeanings, setWordMeanings] = useState<{ word: string; meaning: string }[]>([]);
+
+  useEffect(() => {
+    const fetchMeanings = async () => {
+      const meanings = await Promise.all(
+        level.words.map(async (w) => {
+          try {
+            const res = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${w.word}`);
+            if (res.ok) {
+              const data = await res.json();
+              // Replace word in definition with underscores
+              const rawMeaning = data[0]?.meanings[0]?.definitions[0]?.definition || 'Meaning not found.';
+              const regex = new RegExp(w.word, 'gi');
+              const meaning = rawMeaning.replace(regex, '_____');
+              return { word: w.word, meaning };
+            }
+          } catch (e) {
+            console.error(e);
+          }
+          return { word: w.word, meaning: 'Meaning not available.' };
+        })
+      );
+      setWordMeanings(meanings);
+    };
+    
+    if (level) {
+      fetchMeanings();
+    }
+  }, [level]);
 
   useEffect(() => {
     if (level && wordsFound.length === level.words.length) {
@@ -26,26 +55,6 @@ export const Game = ({ onBack }: { onBack: () => void }) => {
         origin: { y: 0.6 }
       });
       
-      const fetchMeanings = async () => {
-        const meanings = await Promise.all(
-          level.words.map(async (w) => {
-            try {
-              const res = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${w.word}`);
-              if (res.ok) {
-                const data = await res.json();
-                const meaning = data[0]?.meanings[0]?.definitions[0]?.definition || 'Meaning not found.';
-                return { word: w.word, meaning };
-              }
-            } catch (e) {
-              console.error(e);
-            }
-            return { word: w.word, meaning: 'Meaning not available.' };
-          })
-        );
-        setWordMeanings(meanings);
-      };
-      
-      fetchMeanings();
       setTimeout(() => setShowLevelComplete(true), 1000);
     }
   }, [wordsFound, level]);
@@ -133,6 +142,9 @@ export const Game = ({ onBack }: { onBack: () => void }) => {
           <span className="text-lg font-bold">{level.difficulty}</span>
         </div>
         <div className="flex items-center gap-2">
+          <button onClick={() => { playSound(); setShowMeanings(true); }} className="p-2 hover:bg-white/20 rounded-full transition-colors text-white">
+            <Lightbulb size={20} />
+          </button>
           <button onClick={() => { playSound(); toggleSound(); }} className="p-2 hover:bg-white/20 rounded-full transition-colors">
             {soundEnabled ? <Volume2 size={20} /> : <VolumeX size={20} />}
           </button>
@@ -142,6 +154,42 @@ export const Game = ({ onBack }: { onBack: () => void }) => {
           </div>
         </div>
       </div>
+
+      {/* Meanings Modal */}
+      <AnimatePresence>
+        {showMeanings && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="absolute inset-0 bg-slate-900/90 backdrop-blur-md flex items-center justify-center p-4 z-50"
+            onClick={() => setShowMeanings(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9 }}
+              animate={{ scale: 1 }}
+              className="bg-white rounded-2xl p-6 w-full max-w-sm shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <h2 className="text-2xl font-bold text-indigo-900 mb-4">Word Meanings</h2>
+              <div className="space-y-4 max-h-96 overflow-y-auto">
+                {wordMeanings.map((m, i) => (
+                  <div key={i} className="border-b border-gray-200 pb-2">
+                    <p className="text-indigo-600 font-bold">{m.word.length} letters</p>
+                    <p className="text-gray-700 text-sm">{m.meaning}</p>
+                  </div>
+                ))}
+              </div>
+              <button
+                onClick={() => setShowMeanings(false)}
+                className="w-full mt-6 py-2 bg-indigo-600 text-white rounded-xl font-bold"
+              >
+                Close
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Game Area */}
       <div className="flex-1 flex flex-col items-center justify-between pb-4 relative min-h-0">
