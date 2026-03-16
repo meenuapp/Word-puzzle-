@@ -1,3 +1,5 @@
+import { DailyChallenge } from './challenge';
+
 export interface Word {
   id?: string;
   word: string;
@@ -44,4 +46,6 @@ export interface GameState {
   totalPlayTime: number; // in seconds
   playedLevels: number[];
   words: Word[];
+  dailyChallenge: DailyChallenge | null;
+  dynamicLevels: Level[];
 }

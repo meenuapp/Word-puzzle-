@@ -41,6 +41,18 @@
           "type": "number",
           "description": "Total play time in seconds."
         },
+        "selectedDifficulty": {
+          "type": "string",
+          "description": "The currently selected difficulty level."
+        },
+        "playedLevels": {
+          "type": "array",
+          "description": "List of level IDs that the user has played."
+        },
+        "dynamicLevels": {
+          "type": "array",
+          "description": "List of dynamically generated levels for the user."
+        },
         "updatedAt": {
           "type": "timestamp",
           "description": "The timestamp of the last update."

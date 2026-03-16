@@ -8,16 +8,17 @@ import { signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from
 import { LEVELS } from '../data/levels';
 
 export const Home = ({ onPlay, onDaily }: { onPlay: () => void; onDaily: () => void }) => {
-  const { currentLevelId, coins, score, levelsCompleted, checkDailyLogin, dailyStreak, soundEnabled, toggleSound, setDifficulty, loadLevel, addCoins } = useGameStore();
+  const { currentLevelId, coins, score, levelsCompleted, checkDailyLogin, dailyStreak, soundEnabled, toggleSound, setDifficulty, loadLevel, addCoins, fetchDailyChallenge, dailyChallenge, generateNewLevel, isGeneratingLevel } = useGameStore();
   const [user, setUser] = useState(auth.currentUser);
   const [showDifficultySelect, setShowDifficultySelect] = useState(false);
   const [loginError, setLoginError] = useState<string | null>(null);
 
   useEffect(() => {
     checkDailyLogin();
+    fetchDailyChallenge();
     const unsubscribe = onAuthStateChanged(auth, (u) => setUser(u));
     return () => unsubscribe();
-  }, [checkDailyLogin]);
+  }, [checkDailyLogin, fetchDailyChallenge]);
 
   const handleLogin = async () => {
     setLoginError(null);
@@ -30,28 +31,15 @@ export const Home = ({ onPlay, onDaily }: { onPlay: () => void; onDaily: () => v
     }
   };
 
-  const handleDifficultySelect = (diff: 'Easy' | 'Medium' | 'Hard') => {
+  const handleDifficultySelect = async (diff: 'Easy' | 'Medium' | 'Hard') => {
     const { selectedDifficulty, currentLevelId, playedLevels } = useGameStore.getState();
     const currentLevel = LEVELS.find(l => l.id === currentLevelId);
     
     setDifficulty(diff);
     
-    // If they picked the same difficulty and the current level matches it, just resume
-    const matchesDiff = currentLevel && (currentLevel.difficulty === diff || (diff === 'Easy' && currentLevel.difficulty === 'Beginner'));
-    
-    if (!matchesDiff || selectedDifficulty !== diff) {
-      // Find levels of this difficulty
-      const diffLevels = LEVELS.filter(l => l.difficulty === diff || (diff === 'Easy' && l.difficulty === 'Beginner'));
-      if (diffLevels.length > 0) {
-        let unplayedLevels = diffLevels.filter(l => !playedLevels.includes(l.id));
-        if (unplayedLevels.length === 0) {
-          unplayedLevels = diffLevels;
-        }
-        // Pick a random unplayed level
-        const randomLevel = unplayedLevels[Math.floor(Math.random() * unplayedLevels.length)];
-        loadLevel(randomLevel.id);
-      }
-    }
+    // Always generate a new level if the user wants "new words everytime"
+    // or if they are switching difficulty
+    await generateNewLevel(diff);
     onPlay();
   };
 
@@ -168,21 +156,24 @@ export const Home = ({ onPlay, onDaily }: { onPlay: () => void; onDaily: () => v
               <div className="flex flex-col gap-4 w-full max-w-xs">
                 <Button
                   onClick={() => handleDifficultySelect('Easy')}
-                  className="w-full py-4 bg-gradient-to-r from-emerald-400 to-teal-500 rounded-2xl font-bold text-xl text-white shadow-lg shadow-teal-500/30"
+                  disabled={isGeneratingLevel}
+                  className="w-full py-4 bg-gradient-to-r from-emerald-400 to-teal-500 rounded-2xl font-bold text-xl text-white shadow-lg shadow-teal-500/30 disabled:opacity-50"
                 >
-                  EASY
+                  {isGeneratingLevel ? 'GENERATING...' : 'EASY'}
                 </Button>
                 <Button
                   onClick={() => handleDifficultySelect('Medium')}
-                  className="w-full py-4 bg-gradient-to-r from-blue-400 to-indigo-500 rounded-2xl font-bold text-xl text-white shadow-lg shadow-indigo-500/30"
+                  disabled={isGeneratingLevel}
+                  className="w-full py-4 bg-gradient-to-r from-blue-400 to-indigo-500 rounded-2xl font-bold text-xl text-white shadow-lg shadow-indigo-500/30 disabled:opacity-50"
                 >
-                  MEDIUM
+                  {isGeneratingLevel ? 'GENERATING...' : 'MEDIUM'}
                 </Button>
                 <Button
                   onClick={() => handleDifficultySelect('Hard')}
-                  className="w-full py-4 bg-gradient-to-r from-rose-400 to-red-500 rounded-2xl font-bold text-xl text-white shadow-lg shadow-red-500/30"
+                  disabled={isGeneratingLevel}
+                  className="w-full py-4 bg-gradient-to-r from-rose-400 to-red-500 rounded-2xl font-bold text-xl text-white shadow-lg shadow-red-500/30 disabled:opacity-50"
                 >
-                  HARD
+                  {isGeneratingLevel ? 'GENERATING...' : 'HARD'}
                 </Button>
               </div>
             </motion.div>
@@ -197,11 +188,11 @@ export const Home = ({ onPlay, onDaily }: { onPlay: () => void; onDaily: () => v
           className="bg-black/20 backdrop-blur-sm p-4 rounded-3xl flex flex-col items-center justify-center gap-2 hover:bg-black/30 transition-colors border border-white/10"
         >
           <div className="relative">
-            <Calendar size={32} className="text-indigo-300" />
-            <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-indigo-900"></div>
+            <Calendar size={32} className={dailyChallenge?.isCompleted ? "text-green-400" : "text-indigo-300"} />
+            {!dailyChallenge?.isCompleted && <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-indigo-900"></div>}
           </div>
           <span className="font-bold text-sm">Daily Puzzle</span>
-          <span className="text-xs opacity-70">{dailyStreak} Day Streak</span>
+          <span className="text-xs opacity-70">{dailyChallenge?.isCompleted ? 'Completed' : 'Available'}</span>
         </Button>
 
         <Button className="bg-black/20 backdrop-blur-sm p-4 rounded-3xl flex flex-col items-center justify-center gap-2 hover:bg-black/30 transition-colors border border-white/10">

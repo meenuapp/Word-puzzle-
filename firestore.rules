@@ -17,6 +17,9 @@ service cloud.firestore {
     //   - lastLoginDate: string (optional) - The date of the user's last login (YYYY-MM-DD).
     //   - levelsCompleted: number (required) - The total number of levels completed.
     //   - totalPlayTime: number (required) - Total play time in seconds.
+    //   - selectedDifficulty: string (optional) - The currently selected difficulty level.
+    //   - playedLevels: list (optional) - List of level IDs that the user has played.
+    //   - dynamicLevels: list (optional) - List of dynamically generated levels for the user.
     //   - updatedAt: timestamp (required) - The timestamp of the last update.
     //
     // ===============================================================
@@ -53,8 +56,11 @@ service cloud.firestore {
     }
     
     function isValidUserProgress(data) {
-      return hasOnlyAllowedFields(['uid', 'currentLevelId', 'coins', 'hints', 'score', 'dailyStreak', 'lastLoginDate', 'levelsCompleted', 'totalPlayTime', 'updatedAt']) &&
-             hasRequiredFields(['uid', 'currentLevelId', 'coins', 'hints', 'score', 'dailyStreak', 'levelsCompleted', 'totalPlayTime', 'updatedAt']) &&
+      let allowedFields = ['uid', 'currentLevelId', 'coins', 'hints', 'score', 'dailyStreak', 'lastLoginDate', 'levelsCompleted', 'totalPlayTime', 'selectedDifficulty', 'playedLevels', 'dynamicLevels', 'updatedAt'];
+      let requiredFields = ['uid', 'currentLevelId', 'coins', 'hints', 'score', 'dailyStreak', 'levelsCompleted', 'totalPlayTime', 'updatedAt'];
+      
+      return hasOnlyAllowedFields(allowedFields) &&
+             hasRequiredFields(requiredFields) &&
              data.uid is string && data.uid.size() > 0 && data.uid.size() < 100 &&
              data.currentLevelId is number && data.currentLevelId >= 1 &&
              data.coins is number && data.coins >= 0 &&
@@ -64,7 +70,10 @@ service cloud.firestore {
              data.levelsCompleted is number && data.levelsCompleted >= 0 &&
              data.totalPlayTime is number && data.totalPlayTime >= 0 &&
              data.updatedAt is timestamp &&
-             (!('lastLoginDate' in data) || isValidDateString(data.lastLoginDate));
+             (!('lastLoginDate' in data) || isValidDateString(data.lastLoginDate)) &&
+             (!('selectedDifficulty' in data) || (data.selectedDifficulty is string || data.selectedDifficulty == null)) &&
+             (!('playedLevels' in data) || data.playedLevels is list) &&
+             (!('dynamicLevels' in data) || data.dynamicLevels is list);
     }
 
     match /users/{userId} {
@@ -77,6 +86,12 @@ service cloud.firestore {
     match /words/{wordId} {
       allow read: if isAuthenticated();
       allow create: if isAuthenticated() && hasRequiredFields(['word', 'meaning', 'difficulty']) && hasOnlyAllowedFields(['word', 'meaning', 'difficulty']) && request.resource.data.word is string && request.resource.data.word.size() > 0 && request.resource.data.word.size() < 50 && request.resource.data.meaning is string && request.resource.data.meaning.size() > 0 && request.resource.data.meaning.size() < 500 && request.resource.data.difficulty in ['easy', 'medium', 'hard'];
+    }
+
+    match /dailyChallenges/{date} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated() && hasRequiredFields(['id', 'date', 'word', 'description', 'isCompleted', 'reward']) && hasOnlyAllowedFields(['id', 'date', 'word', 'description', 'isCompleted', 'reward']) && request.resource.data.date is string && request.resource.data.isCompleted is bool && request.resource.data.reward is number;
+      allow update: if isAuthenticated() && hasRequiredFields(['id', 'date', 'word', 'description', 'isCompleted', 'reward']) && hasOnlyAllowedFields(['id', 'date', 'word', 'description', 'isCompleted', 'reward']) && request.resource.data.date is string && request.resource.data.isCompleted is bool && request.resource.data.reward is number;
     }
   }
 }

@@ -1,13 +1,16 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { GameState, Level, Cell, Word } from '../types/game';
+import { DailyChallenge } from '../types/challenge';
 import { LEVELS } from '../data/levels';
 import { db, auth } from '../firebase';
 import { doc, setDoc, getDoc, serverTimestamp } from 'firebase/firestore';
 import { getStoredWords, generateAndStoreWords } from '../services/wordService';
+import { generateDynamicLevel } from '../services/levelGenerator';
 
 interface GameStore extends GameState {
   soundEnabled: boolean;
+  isGeneratingLevel: boolean;
   // Actions
   loadLevel: (levelId: number) => void;
   setDifficulty: (difficulty: 'Easy' | 'Medium' | 'Hard' | null) => void;
@@ -21,6 +24,8 @@ interface GameStore extends GameState {
   syncToCloud: () => Promise<void>;
   loadFromCloud: () => Promise<void>;
   fetchWords: () => Promise<void>;
+  fetchDailyChallenge: () => Promise<void>;
+  generateNewLevel: (difficulty: 'Easy' | 'Medium' | 'Hard') => Promise<void>;
 }
 
 const INITIAL_STATE: GameState = {
@@ -39,6 +44,8 @@ const INITIAL_STATE: GameState = {
   totalPlayTime: 0,
   playedLevels: [],
   words: [],
+  dailyChallenge: null,
+  dynamicLevels: [],
 };
 
 export const useGameStore = create<GameStore>()(
@@ -46,6 +53,7 @@ export const useGameStore = create<GameStore>()(
     (set, get) => ({
       ...INITIAL_STATE,
       soundEnabled: true,
+      isGeneratingLevel: false,
 
       fetchWords: async () => {
         let words = await getStoredWords();
@@ -53,6 +61,27 @@ export const useGameStore = create<GameStore>()(
           words = await generateAndStoreWords(words);
         }
         set({ words });
+      },
+
+      fetchDailyChallenge: async () => {
+        const today = new Date().toISOString().split('T')[0];
+        const challengeRef = doc(db, 'dailyChallenges', today);
+        const challengeSnap = await getDoc(challengeRef);
+        if (challengeSnap.exists()) {
+          set({ dailyChallenge: challengeSnap.data() as DailyChallenge });
+        } else {
+          // Fallback or generate new challenge
+          const newChallenge: DailyChallenge = {
+            id: today,
+            date: today,
+            word: 'PUZZLE',
+            description: 'A game, toy, or problem designed to test ingenuity or knowledge.',
+            isCompleted: false,
+            reward: 50,
+          };
+          await setDoc(challengeRef, newChallenge);
+          set({ dailyChallenge: newChallenge });
+        }
       },
 
       loadLevel: (levelId) => {
@@ -66,6 +95,60 @@ export const useGameStore = create<GameStore>()(
         get().syncToCloud();
       },
 
+      generateNewLevel: async (difficulty) => {
+        console.log(`Starting level generation for difficulty: ${difficulty}`);
+        
+        if (!navigator.onLine) {
+          console.log('Offline: Falling back to existing level');
+          const diffLevels = LEVELS.filter(l => l.difficulty === difficulty || (difficulty === 'Easy' && l.difficulty === 'Beginner'));
+          if (diffLevels.length > 0) {
+            const randomLevel = diffLevels[Math.floor(Math.random() * diffLevels.length)];
+            get().loadLevel(randomLevel.id);
+          }
+          return;
+        }
+
+        set({ isGeneratingLevel: true });
+        
+        const timeoutPromise = new Promise((_, reject) => 
+          setTimeout(() => reject(new Error('Generation timed out after 30s')), 30000)
+        );
+
+        try {
+          const nextId = Math.max(0, ...LEVELS.map(l => l.id), ...get().dynamicLevels.map(l => l.id)) + 1;
+          console.log(`Generating level with ID: ${nextId}`);
+          
+          const newLevel = await Promise.race([
+            generateDynamicLevel(difficulty, nextId),
+            timeoutPromise
+          ]) as Level;
+
+          console.log('Level generated successfully:', newLevel.id);
+
+          set((s) => ({
+            dynamicLevels: [...s.dynamicLevels, newLevel],
+            currentLevelId: newLevel.id,
+            wordsFound: [],
+            bonusWordsFound: [],
+            revealedCells: [],
+            playedLevels: [...s.playedLevels, newLevel.id],
+            isGeneratingLevel: false
+          }));
+          get().syncToCloud();
+        } catch (error) {
+          console.error('Failed to generate level:', error);
+          set({ isGeneratingLevel: false });
+          
+          // Fallback to a random existing level if generation fails
+          console.log('Falling back to existing level...');
+          const diffLevels = LEVELS.filter(l => l.difficulty === difficulty || (difficulty === 'Easy' && l.difficulty === 'Beginner'));
+          if (diffLevels.length > 0) {
+            const randomLevel = diffLevels[Math.floor(Math.random() * diffLevels.length)];
+            get().loadLevel(randomLevel.id);
+          }
+        }
+      },
+
       setDifficulty: (difficulty) => {
         set({ selectedDifficulty: difficulty });
         get().syncToCloud();
@@ -73,7 +156,7 @@ export const useGameStore = create<GameStore>()(
 
       submitWord: (word) => {
         const state = get();
-        const level = LEVELS.find((l) => l.id === state.currentLevelId);
+        const level = LEVELS.find((l) => l.id === state.currentLevelId) || state.dynamicLevels.find((l) => l.id === state.currentLevelId);
         if (!level) return 'invalid';
 
         if (state.wordsFound.includes(word) || state.bonusWordsFound.includes(word)) {
@@ -125,7 +208,7 @@ export const useGameStore = create<GameStore>()(
 
       useHint: (type) => {
         const state = get();
-        const level = LEVELS.find((l) => l.id === state.currentLevelId);
+        const level = LEVELS.find((l) => l.id === state.currentLevelId) || state.dynamicLevels.find((l) => l.id === state.currentLevelId);
         if (!level) return false;
 
         const hintCost = type === 'reveal_word' ? 50 : 25;
@@ -258,6 +341,7 @@ export const useGameStore = create<GameStore>()(
             levelsCompleted: state.levelsCompleted,
             totalPlayTime: state.totalPlayTime,
             playedLevels: state.playedLevels,
+            dynamicLevels: state.dynamicLevels,
             updatedAt: serverTimestamp()
           }, { merge: true });
         } catch (error) {
@@ -283,6 +367,7 @@ export const useGameStore = create<GameStore>()(
               levelsCompleted: data.levelsCompleted ?? 0,
               totalPlayTime: data.totalPlayTime ?? 0,
               playedLevels: data.playedLevels ?? [],
+              dynamicLevels: data.dynamicLevels ?? [],
             });
           }
         } catch (error) {

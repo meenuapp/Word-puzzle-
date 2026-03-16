@@ -9,9 +9,9 @@ import { Coins, Lightbulb, ArrowLeft, Star, Volume2, VolumeX } from 'lucide-reac
 import { useSound } from '../context/SoundContext';
 
 export const Game = ({ onBack }: { onBack: () => void }) => {
-  const { currentLevelId, submitWord, useHint, coins, wordsFound, score, loadLevel, soundEnabled, toggleSound } = useGameStore();
+  const { currentLevelId, submitWord, useHint, coins, wordsFound, score, loadLevel, soundEnabled, toggleSound, generateNewLevel, isGeneratingLevel, dynamicLevels } = useGameStore();
   const { playSound } = useSound();
-  const level = LEVELS.find((l) => l.id === currentLevelId);
+  const level = LEVELS.find((l) => l.id === currentLevelId) || dynamicLevels.find((l) => l.id === currentLevelId);
   const [feedback, setFeedback] = useState<{ text: string; type: 'success' | 'error' | 'bonus' } | null>(null);
   const [showLevelComplete, setShowLevelComplete] = useState(false);
   const [showMeanings, setShowMeanings] = useState(false);
@@ -84,39 +84,17 @@ export const Game = ({ onBack }: { onBack: () => void }) => {
     }, 1500);
   };
 
-  const handleNextLevel = () => {
+  const handleNextLevel = async () => {
     setShowLevelComplete(false);
     setWordMeanings([]);
-    const { selectedDifficulty, playedLevels } = useGameStore.getState();
+    const { selectedDifficulty } = useGameStore.getState();
     
     if (selectedDifficulty) {
-      const diffLevels = LEVELS.filter(l => l.difficulty === selectedDifficulty || (selectedDifficulty === 'Easy' && l.difficulty === 'Beginner'));
-      if (diffLevels.length > 0) {
-        // Find levels of this difficulty that haven't been played yet
-        let unplayedLevels = diffLevels.filter(l => !playedLevels.includes(l.id));
-        
-        // If all levels of this difficulty have been played, reset the played history for this difficulty
-        if (unplayedLevels.length === 0) {
-          unplayedLevels = diffLevels;
-          // Note: We could clear them from playedLevels, but for simplicity we just pick from all of them
-        }
-        
-        // Pick a random unplayed level
-        let nextLevel = unplayedLevels[Math.floor(Math.random() * unplayedLevels.length)];
-        
-        // Ensure we don't pick the exact same level if there are other options
-        if (unplayedLevels.length > 1 && nextLevel.id === currentLevelId) {
-          const otherLevels = unplayedLevels.filter(l => l.id !== currentLevelId);
-          nextLevel = otherLevels[Math.floor(Math.random() * otherLevels.length)];
-        }
-        
-        loadLevel(nextLevel.id);
-        return;
-      }
+      await generateNewLevel(selectedDifficulty);
+    } else {
+      // Fallback to sequential if no difficulty selected (shouldn't happen with new flow)
+      loadLevel(currentLevelId + 1);
     }
-    
-    // Fallback to sequential
-    loadLevel(currentLevelId + 1);
   };
 
   if (!level) {
@@ -304,9 +282,10 @@ export const Game = ({ onBack }: { onBack: () => void }) => {
 
               <button
                 onClick={() => { playSound(); handleNextLevel(); }}
-                className="w-full py-4 bg-white text-indigo-900 rounded-2xl font-black text-xl shadow-lg hover:bg-indigo-50 transition-all active:scale-95 flex items-center justify-center gap-2"
+                disabled={isGeneratingLevel}
+                className="w-full py-4 bg-white text-indigo-900 rounded-2xl font-black text-xl shadow-lg hover:bg-indigo-50 transition-all active:scale-95 flex items-center justify-center gap-2 disabled:opacity-50"
               >
-                Next Level
+                {isGeneratingLevel ? 'Generating...' : 'Next Level'}
               </button>
             </motion.div>
           </motion.div>
