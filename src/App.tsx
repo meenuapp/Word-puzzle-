@@ -41,7 +41,7 @@ export default function App() {
 
     const handleInteraction = () => {
       if (soundEnabled && audio.paused) {
-        playAudio();
+        audio.play().catch(e => console.log("Audio play error:", e));
       }
     };
 
@@ -70,11 +70,10 @@ export default function App() {
       <MagicalBackground />
 
       {/* Audio */}
-      <audio 
-        ref={audioRef} 
-        loop 
-        src="https://upload.wikimedia.org/wikipedia/commons/9/9b/Gymnopedie_No._1.ogg" 
-      />
+      <audio ref={audioRef} loop>
+        <source src="https://upload.wikimedia.org/wikipedia/commons/b/b4/Satie_-_Gymnop%C3%A9die_No._1.mp3" type="audio/mpeg" />
+        <source src="https://upload.wikimedia.org/wikipedia/commons/9/9b/Gymnopedie_No._1.ogg" type="audio/ogg" />
+      </audio>
       
       {/* Content */}
       <div className="relative z-10 w-full h-full">

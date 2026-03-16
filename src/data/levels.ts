@@ -293,15 +293,15 @@ export const LEVELS: Level[] = [
         "direction": "horizontal"
       },
       {
-        "word": "ART",
-        "x": 4,
-        "y": 1,
+        "word": "RAW",
+        "x": 0,
+        "y": 0,
         "direction": "vertical"
       }
     ],
     "bonusWords": [
       "WAR",
-      "RAW",
+      "ART",
       "ATE",
       "TAR"
     ]

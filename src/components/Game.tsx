@@ -183,10 +183,10 @@ export const Game = ({ onBack }: { onBack: () => void }) => {
 
         {/* Controls & Wheel */}
         <div className="w-full flex flex-col items-center gap-2">
-          <div className="flex items-center justify-between w-full px-4">
+          <div className="relative flex items-center justify-center w-full px-2">
             <button 
               onClick={() => useHint('reveal_letter')}
-              className="flex flex-col items-center gap-1 text-white opacity-90 hover:opacity-100 transition-opacity"
+              className="absolute left-2 sm:left-4 flex flex-col items-center gap-1 text-white opacity-90 hover:opacity-100 transition-opacity"
             >
               <div className="w-12 h-12 bg-indigo-500/50 rounded-full flex items-center justify-center border border-white/20 shadow-lg">
                 <Lightbulb size={24} />
@@ -201,7 +201,7 @@ export const Game = ({ onBack }: { onBack: () => void }) => {
 
             <button 
               onClick={() => useHint('reveal_word')}
-              className="flex flex-col items-center gap-1 text-white opacity-90 hover:opacity-100 transition-opacity"
+              className="absolute right-2 sm:right-4 flex flex-col items-center gap-1 text-white opacity-90 hover:opacity-100 transition-opacity"
             >
               <div className="w-12 h-12 bg-indigo-500/50 rounded-full flex items-center justify-center border border-white/20 shadow-lg">
                 <Star size={24} />
