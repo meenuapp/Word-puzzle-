@@ -151,6 +151,29 @@ export const useGameStore = create<GameStore>()(
             coins: s.coins - hintCost,
             revealedCells: [...s.revealedCells, randomCell],
           }));
+
+          // Check if level completed
+          // We need to check if all cells are revealed now
+          const allCellsInLevel: {x: number, y: number}[] = [];
+          level.words.forEach(w => {
+            for (let i = 0; i < w.word.length; i++) {
+              const x = w.direction === 'horizontal' ? w.x + i : w.x;
+              const y = w.direction === 'vertical' ? w.y + i : w.y;
+              allCellsInLevel.push({x, y});
+            }
+          });
+          
+          const uniqueCells = Array.from(new Set(allCellsInLevel.map(c => `${c.x},${c.y}`))).map(s => {
+            const [x, y] = s.split(',').map(Number);
+            return {x, y};
+          });
+
+          if (get().revealedCells.length === uniqueCells.length) {
+            set((s) => ({
+              levelsCompleted: s.levelsCompleted + 1,
+            }));
+          }
+
           get().syncToCloud();
           return true;
         }
@@ -174,6 +197,14 @@ export const useGameStore = create<GameStore>()(
             wordsFound: [...s.wordsFound, randomWord.word],
             revealedCells: newRevealed,
           }));
+
+          // Check if level completed
+          if (get().wordsFound.length === level.words.length) {
+            set((s) => ({
+              levelsCompleted: s.levelsCompleted + 1,
+            }));
+          }
+
           get().syncToCloud();
           return true;
         }

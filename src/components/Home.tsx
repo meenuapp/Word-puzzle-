@@ -8,7 +8,7 @@ import { signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from
 import { LEVELS } from '../data/levels';
 
 export const Home = ({ onPlay, onDaily }: { onPlay: () => void; onDaily: () => void }) => {
-  const { currentLevelId, coins, score, levelsCompleted, checkDailyLogin, dailyStreak, soundEnabled, toggleSound, setDifficulty, loadLevel } = useGameStore();
+  const { currentLevelId, coins, score, levelsCompleted, checkDailyLogin, dailyStreak, soundEnabled, toggleSound, setDifficulty, loadLevel, addCoins } = useGameStore();
   const [user, setUser] = useState(auth.currentUser);
   const [showDifficultySelect, setShowDifficultySelect] = useState(false);
   const [loginError, setLoginError] = useState<string | null>(null);
@@ -70,6 +70,15 @@ export const Home = ({ onPlay, onDaily }: { onPlay: () => void; onDaily: () => v
           >
             {soundEnabled ? <Volume2 size={20} /> : <VolumeX size={20} />}
           </Button>
+          {user?.email === 'tamilanews@gmail.com' && (
+            <Button 
+              onClick={() => addCoins(1000)}
+              className="p-2 bg-yellow-500/20 rounded-full backdrop-blur-sm hover:bg-yellow-500/30 transition-colors"
+              title="Refill Coins"
+            >
+              <Coins size={20} className="text-yellow-400" />
+            </Button>
+          )}
           {!user ? (
             <Button onClick={handleLogin} className="flex items-center gap-2 px-4 py-2 bg-black/20 rounded-full backdrop-blur-sm hover:bg-black/30 transition-colors font-bold text-sm">
               <LogIn size={18} />
