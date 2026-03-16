@@ -85,8 +85,8 @@ export const LetterWheel = ({ onWordSubmit }: { onWordSubmit: (word: string) => 
   const currentWord = selectedIndices.map((i) => letters[i]).join('');
 
   return (
-    <div className="flex flex-col items-center justify-center p-4">
-      <div className="h-12 mb-4 flex items-center justify-center">
+    <div className="flex flex-col items-center justify-center p-2">
+      <div className="h-10 mb-2 flex items-center justify-center">
         {currentWord && (
           <motion.div
             initial={{ scale: 0.8, opacity: 0 }}

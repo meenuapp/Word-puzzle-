@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useGameStore } from '../store/gameStore';
 import { LEVELS } from '../data/levels';
 import { motion } from 'motion/react';
@@ -7,6 +7,15 @@ import clsx from 'clsx';
 export const CrosswordGrid = () => {
   const { currentLevelId, wordsFound, revealedCells } = useGameStore();
   const level = LEVELS.find((l) => l.id === currentLevelId);
+  const [dimensions, setDimensions] = useState({ width: window.innerWidth, height: window.innerHeight });
+
+  useEffect(() => {
+    const handleResize = () => {
+      setDimensions({ width: window.innerWidth, height: window.innerHeight });
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   if (!level) return null;
 
@@ -22,11 +31,17 @@ export const CrosswordGrid = () => {
   const width = maxX - minX + 1;
   const height = maxY - minY + 1;
 
-  // Calculate scale to fit within a reasonable area on mobile screens
-  const maxGridWidth = 20; // rem
-  const maxGridHeight = 20; // rem
-  const scaleX = maxGridWidth / (width * 3);
-  const scaleY = maxGridHeight / (height * 3);
+  // Calculate scale to fit within available area on mobile screens
+  // Header ~60px, Bottom controls ~340px. Total fixed height ~400px.
+  const availableWidth = Math.min(dimensions.width, 448) - 32; // 448px is max-w-md
+  const availableHeight = Math.max(150, dimensions.height - 400); 
+  
+  // Grid logical size in pixels (1rem = 16px, so 3rem = 48px)
+  const gridPixelWidth = width * 48;
+  const gridPixelHeight = height * 48;
+
+  const scaleX = availableWidth / gridPixelWidth;
+  const scaleY = availableHeight / gridPixelHeight;
   const scale = Math.min(1, scaleX, scaleY);
 
   // Create grid cells

@@ -142,7 +142,7 @@ export const Game = ({ onBack }: { onBack: () => void }) => {
       </div>
 
       {/* Game Area */}
-      <div className="flex-1 flex flex-col items-center justify-between pb-8 relative">
+      <div className="flex-1 flex flex-col items-center justify-between pb-4 relative min-h-0">
         {/* Floating Scores */}
         <AnimatePresence>
           {floatingScores.map((score) => (
@@ -162,7 +162,7 @@ export const Game = ({ onBack }: { onBack: () => void }) => {
         <CrosswordGrid />
 
         {/* Feedback Message */}
-        <div className="h-8 flex items-center justify-center">
+        <div className="h-6 flex items-center justify-center">
           <AnimatePresence>
             {feedback && (
               <motion.div
@@ -182,8 +182,8 @@ export const Game = ({ onBack }: { onBack: () => void }) => {
         </div>
 
         {/* Controls & Wheel */}
-        <div className="w-full flex flex-col items-center gap-4">
-          <div className="flex items-center justify-between w-full px-8">
+        <div className="w-full flex flex-col items-center gap-2">
+          <div className="flex items-center justify-between w-full px-4">
             <button 
               onClick={() => useHint('reveal_letter')}
               className="flex flex-col items-center gap-1 text-white opacity-90 hover:opacity-100 transition-opacity"
