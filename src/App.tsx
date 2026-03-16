@@ -57,7 +57,7 @@ export default function App() {
   }, [soundEnabled]);
 
   return (
-    <div className="w-full h-screen bg-slate-900 overflow-hidden font-sans select-none touch-none">
+    <div className="w-full h-screen bg-slate-900 overflow-hidden overflow-x-hidden font-sans select-none touch-none">
       {/* Background Theme */}
       <div 
         className="absolute inset-0 z-0 bg-cover bg-center transition-all duration-1000"
@@ -70,9 +70,8 @@ export default function App() {
       <MagicalBackground />
 
       {/* Audio */}
-      <audio ref={audioRef} loop>
+      <audio ref={audioRef} loop preload="auto">
         <source src="https://upload.wikimedia.org/wikipedia/commons/b/b4/Satie_-_Gymnop%C3%A9die_No._1.mp3" type="audio/mpeg" />
-        <source src="https://upload.wikimedia.org/wikipedia/commons/9/9b/Gymnopedie_No._1.ogg" type="audio/ogg" />
       </audio>
       
       {/* Content */}
