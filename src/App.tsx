@@ -9,17 +9,18 @@ import { SoundProvider } from './context/SoundContext';
 
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState<'home' | 'game' | 'daily'>('home');
-  const { loadFromCloud, soundEnabled } = useGameStore();
+  const { loadFromCloud, soundEnabled, fetchWords } = useGameStore();
   const audioRef = useRef<HTMLAudioElement>(null);
 
   useEffect(() => {
+    fetchWords();
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         loadFromCloud();
       }
     });
     return () => unsubscribe();
-  }, [loadFromCloud]);
+  }, [loadFromCloud, fetchWords]);
 
   useEffect(() => {
     const audio = audioRef.current;

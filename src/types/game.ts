@@ -1,3 +1,10 @@
+export interface Word {
+  id?: string;
+  word: string;
+  meaning: string;
+  difficulty: 'easy' | 'medium' | 'hard';
+}
+
 export interface WordPosition {
   word: string;
   x: number;
@@ -36,4 +43,5 @@ export interface GameState {
   levelsCompleted: number;
   totalPlayTime: number; // in seconds
   playedLevels: number[];
+  words: Word[];
 }

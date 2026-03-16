@@ -73,5 +73,10 @@ service cloud.firestore {
       allow update: if isOwner(userId) && isValidUserProgress(request.resource.data) && uidNotModified();
       allow delete: if isOwner(userId);
     }
+
+    match /words/{wordId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated() && hasRequiredFields(['word', 'meaning', 'difficulty']) && hasOnlyAllowedFields(['word', 'meaning', 'difficulty']) && request.resource.data.word is string && request.resource.data.word.size() > 0 && request.resource.data.word.size() < 50 && request.resource.data.meaning is string && request.resource.data.meaning.size() > 0 && request.resource.data.meaning.size() < 500 && request.resource.data.difficulty in ['easy', 'medium', 'hard'];
+    }
   }
 }

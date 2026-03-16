@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Button } from './Button';
 import { useGameStore } from '../store/gameStore';
 import { motion, AnimatePresence } from 'motion/react';
 import { Play, Calendar, Trophy, LogIn, LogOut, Coins, Volume2, VolumeX, ArrowLeft } from 'lucide-react';
@@ -63,22 +64,22 @@ export const Home = ({ onPlay, onDaily }: { onPlay: () => void; onDaily: () => v
           <span className="font-bold text-lg">{coins}</span>
         </div>
         <div className="flex items-center gap-2">
-          <button 
+          <Button 
             onClick={toggleSound}
             className="p-2 bg-black/20 rounded-full backdrop-blur-sm hover:bg-black/30 transition-colors"
           >
             {soundEnabled ? <Volume2 size={20} /> : <VolumeX size={20} />}
-          </button>
+          </Button>
           {!user ? (
-            <button onClick={handleLogin} className="flex items-center gap-2 px-4 py-2 bg-black/20 rounded-full backdrop-blur-sm hover:bg-black/30 transition-colors font-bold text-sm">
+            <Button onClick={handleLogin} className="flex items-center gap-2 px-4 py-2 bg-black/20 rounded-full backdrop-blur-sm hover:bg-black/30 transition-colors font-bold text-sm">
               <LogIn size={18} />
               <span>Sign In</span>
-            </button>
+            </Button>
           ) : (
-            <button onClick={() => signOut(auth)} className="flex items-center gap-2 px-4 py-2 bg-black/20 rounded-full backdrop-blur-sm hover:bg-black/30 transition-colors font-bold text-sm">
+            <Button onClick={() => signOut(auth)} className="flex items-center gap-2 px-4 py-2 bg-black/20 rounded-full backdrop-blur-sm hover:bg-black/30 transition-colors font-bold text-sm">
               <LogOut size={18} />
               <span>Sign Out</span>
-            </button>
+            </Button>
           )}
         </div>
       </div>
@@ -129,16 +130,14 @@ export const Home = ({ onPlay, onDaily }: { onPlay: () => void; onDaily: () => v
               </div>
 
               {/* Play Button */}
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+              <Button
                 onClick={() => setShowDifficultySelect(true)}
                 className="w-full max-w-xs py-5 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full font-black text-2xl text-slate-900 shadow-xl shadow-orange-500/30 flex items-center justify-center gap-3 relative overflow-hidden group"
               >
                 <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
                 <Play size={28} className="fill-slate-900" />
                 <span>PLAY</span>
-              </motion.button>
+              </Button>
             </motion.div>
           ) : (
             <motion.div
@@ -148,40 +147,34 @@ export const Home = ({ onPlay, onDaily }: { onPlay: () => void; onDaily: () => v
               exit={{ opacity: 0, x: 20 }}
               className="flex flex-col items-center justify-center w-full"
             >
-              <button 
+              <Button 
                 onClick={() => setShowDifficultySelect(false)}
                 className="self-start mb-8 p-2 bg-black/20 rounded-full hover:bg-black/30 transition-colors"
               >
                 <ArrowLeft size={24} />
-              </button>
+              </Button>
               
               <h2 className="text-3xl font-black mb-8 tracking-wider">SELECT DIFFICULTY</h2>
               
               <div className="flex flex-col gap-4 w-full max-w-xs">
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
+                <Button
                   onClick={() => handleDifficultySelect('Easy')}
                   className="w-full py-4 bg-gradient-to-r from-emerald-400 to-teal-500 rounded-2xl font-bold text-xl text-white shadow-lg shadow-teal-500/30"
                 >
                   EASY
-                </motion.button>
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
+                </Button>
+                <Button
                   onClick={() => handleDifficultySelect('Medium')}
                   className="w-full py-4 bg-gradient-to-r from-blue-400 to-indigo-500 rounded-2xl font-bold text-xl text-white shadow-lg shadow-indigo-500/30"
                 >
                   MEDIUM
-                </motion.button>
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
+                </Button>
+                <Button
                   onClick={() => handleDifficultySelect('Hard')}
                   className="w-full py-4 bg-gradient-to-r from-rose-400 to-red-500 rounded-2xl font-bold text-xl text-white shadow-lg shadow-red-500/30"
                 >
                   HARD
-                </motion.button>
+                </Button>
               </div>
             </motion.div>
           )}
@@ -190,7 +183,7 @@ export const Home = ({ onPlay, onDaily }: { onPlay: () => void; onDaily: () => v
 
       {/* Bottom Menu */}
       <div className="grid grid-cols-2 gap-4">
-        <button 
+        <Button 
           onClick={onDaily}
           className="bg-black/20 backdrop-blur-sm p-4 rounded-3xl flex flex-col items-center justify-center gap-2 hover:bg-black/30 transition-colors border border-white/10"
         >
@@ -200,13 +193,13 @@ export const Home = ({ onPlay, onDaily }: { onPlay: () => void; onDaily: () => v
           </div>
           <span className="font-bold text-sm">Daily Puzzle</span>
           <span className="text-xs opacity-70">{dailyStreak} Day Streak</span>
-        </button>
+        </Button>
 
-        <button className="bg-black/20 backdrop-blur-sm p-4 rounded-3xl flex flex-col items-center justify-center gap-2 hover:bg-black/30 transition-colors border border-white/10">
+        <Button className="bg-black/20 backdrop-blur-sm p-4 rounded-3xl flex flex-col items-center justify-center gap-2 hover:bg-black/30 transition-colors border border-white/10">
           <Trophy size={32} className="text-yellow-400" />
           <span className="font-bold text-sm">Achievements</span>
           <span className="text-xs opacity-70">{levelsCompleted} Completed</span>
-        </button>
+        </Button>
       </div>
     </div>
   );

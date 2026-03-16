@@ -47,6 +47,26 @@
         }
       },
       "required": ["uid", "currentLevelId", "coins", "hints", "score", "dailyStreak", "levelsCompleted", "totalPlayTime", "updatedAt"]
+    },
+    "Word": {
+      "title": "Word",
+      "description": "A word for the game.",
+      "type": "object",
+      "properties": {
+        "word": {
+          "type": "string",
+          "description": "The word itself."
+        },
+        "meaning": {
+          "type": "string",
+          "description": "The meaning of the word."
+        },
+        "difficulty": {
+          "type": "string",
+          "description": "The difficulty level (easy, medium, hard)."
+        }
+      },
+      "required": ["word", "meaning", "difficulty"]
     }
   },
   "firestore": {
@@ -55,6 +75,12 @@
         "$ref": "#/entities/UserProgress"
       },
       "description": "Stores user progress documents."
+    },
+    "/words/{wordId}": {
+      "schema": {
+        "$ref": "#/entities/Word"
+      },
+      "description": "Stores words for the game."
     }
   }
 }

@@ -1,9 +1,10 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { GameState, Level, Cell } from '../types/game';
+import { GameState, Level, Cell, Word } from '../types/game';
 import { LEVELS } from '../data/levels';
 import { db, auth } from '../firebase';
 import { doc, setDoc, getDoc, serverTimestamp } from 'firebase/firestore';
+import { getStoredWords, generateAndStoreWords } from '../services/wordService';
 
 interface GameStore extends GameState {
   soundEnabled: boolean;
@@ -19,6 +20,7 @@ interface GameStore extends GameState {
   resetCurrentLevel: () => void;
   syncToCloud: () => Promise<void>;
   loadFromCloud: () => Promise<void>;
+  fetchWords: () => Promise<void>;
 }
 
 const INITIAL_STATE: GameState = {
@@ -36,6 +38,7 @@ const INITIAL_STATE: GameState = {
   levelsCompleted: 0,
   totalPlayTime: 0,
   playedLevels: [],
+  words: [],
 };
 
 export const useGameStore = create<GameStore>()(
@@ -43,6 +46,14 @@ export const useGameStore = create<GameStore>()(
     (set, get) => ({
       ...INITIAL_STATE,
       soundEnabled: true,
+
+      fetchWords: async () => {
+        let words = await getStoredWords();
+        if (words.length < 10) {
+          words = await generateAndStoreWords(words);
+        }
+        set({ words });
+      },
 
       loadLevel: (levelId) => {
         set((s) => ({
