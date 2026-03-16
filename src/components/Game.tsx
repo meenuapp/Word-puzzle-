@@ -6,9 +6,11 @@ import { LEVELS } from '../data/levels';
 import { motion, AnimatePresence } from 'motion/react';
 import confetti from 'canvas-confetti';
 import { Coins, Lightbulb, ArrowLeft, Star, Volume2, VolumeX } from 'lucide-react';
+import { useSound } from '../context/SoundContext';
 
 export const Game = ({ onBack }: { onBack: () => void }) => {
   const { currentLevelId, submitWord, useHint, coins, wordsFound, score, loadLevel, soundEnabled, toggleSound } = useGameStore();
+  const { playSound } = useSound();
   const level = LEVELS.find((l) => l.id === currentLevelId);
   const [feedback, setFeedback] = useState<{ text: string; type: 'success' | 'error' | 'bonus' } | null>(null);
   const [showLevelComplete, setShowLevelComplete] = useState(false);
@@ -112,7 +114,7 @@ export const Game = ({ onBack }: { onBack: () => void }) => {
     return (
       <div className="flex flex-col items-center justify-center h-full text-white">
         <h2 className="text-3xl font-bold mb-4">More levels coming soon!</h2>
-        <button onClick={onBack} className="px-6 py-3 bg-white text-indigo-600 rounded-full font-bold shadow-lg">
+        <button onClick={() => { playSound(); onBack(); }} className="px-6 py-3 bg-white text-indigo-600 rounded-full font-bold shadow-lg">
           Back to Home
         </button>
       </div>
@@ -123,7 +125,7 @@ export const Game = ({ onBack }: { onBack: () => void }) => {
     <div className="flex flex-col h-full w-full max-w-md mx-auto relative overflow-hidden">
       {/* Header */}
       <div className="flex items-center justify-between p-4 text-white">
-        <button onClick={onBack} className="p-2 hover:bg-white/20 rounded-full transition-colors">
+        <button onClick={() => { playSound(); onBack(); }} className="p-2 hover:bg-white/20 rounded-full transition-colors">
           <ArrowLeft size={24} />
         </button>
         <div className="flex flex-col items-center">
@@ -131,7 +133,7 @@ export const Game = ({ onBack }: { onBack: () => void }) => {
           <span className="text-lg font-bold">{level.difficulty}</span>
         </div>
         <div className="flex items-center gap-2">
-          <button onClick={toggleSound} className="p-2 hover:bg-white/20 rounded-full transition-colors">
+          <button onClick={() => { playSound(); toggleSound(); }} className="p-2 hover:bg-white/20 rounded-full transition-colors">
             {soundEnabled ? <Volume2 size={20} /> : <VolumeX size={20} />}
           </button>
           <div className="flex items-center gap-2 bg-black/20 px-3 py-1.5 rounded-full">
@@ -185,7 +187,7 @@ export const Game = ({ onBack }: { onBack: () => void }) => {
         <div className="w-full flex flex-col items-center gap-2">
           <div className="relative flex items-center justify-center w-full px-2">
             <button 
-              onClick={() => useHint('reveal_letter')}
+              onClick={() => { playSound(); useHint('reveal_letter'); }}
               className="absolute left-2 sm:left-4 flex flex-col items-center gap-1 text-white opacity-90 hover:opacity-100 transition-opacity"
             >
               <div className="w-12 h-12 bg-indigo-500/50 rounded-full flex items-center justify-center border border-white/20 shadow-lg">
@@ -200,7 +202,7 @@ export const Game = ({ onBack }: { onBack: () => void }) => {
             <LetterWheel onWordSubmit={handleWordSubmit} />
 
             <button 
-              onClick={() => useHint('reveal_word')}
+              onClick={() => { playSound(); useHint('reveal_word'); }}
               className="absolute right-2 sm:right-4 flex flex-col items-center gap-1 text-white opacity-90 hover:opacity-100 transition-opacity"
             >
               <div className="w-12 h-12 bg-indigo-500/50 rounded-full flex items-center justify-center border border-white/20 shadow-lg">
@@ -222,49 +224,39 @@ export const Game = ({ onBack }: { onBack: () => void }) => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="absolute inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50"
+            className="absolute inset-0 bg-slate-900/80 backdrop-blur-md flex items-center justify-center p-4 z-50"
           >
             <motion.div
-              initial={{ scale: 0.9, y: 20 }}
-              animate={{ scale: 1, y: 0 }}
-              className="bg-white rounded-3xl p-8 w-full max-w-sm flex flex-col items-center text-center shadow-2xl"
+              initial={{ scale: 0.8, rotate: -5 }}
+              animate={{ scale: 1, rotate: 0 }}
+              className="bg-gradient-to-b from-indigo-600 to-purple-800 rounded-[2rem] p-8 w-full max-w-sm flex flex-col items-center text-center shadow-2xl border border-white/20"
             >
-              <div className="w-20 h-20 bg-yellow-400 rounded-full flex items-center justify-center mb-4 shadow-inner">
-                <Star size={40} className="text-white fill-white" />
-              </div>
-              <h2 className="text-3xl font-bold text-slate-800 mb-2">Level Cleared!</h2>
-              <p className="text-slate-500 mb-6 font-medium">You found all the words.</p>
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1, rotate: 360 }}
+                transition={{ type: "spring", stiffness: 200, damping: 10 }}
+                className="w-24 h-24 bg-white/20 rounded-full flex items-center justify-center mb-6 shadow-lg border-4 border-white/30"
+              >
+                <Star size={48} className="text-yellow-300 fill-yellow-300" />
+              </motion.div>
               
-              <div className="flex items-center justify-center gap-4 mb-6 w-full">
-                <div className="flex flex-col items-center bg-slate-50 p-4 rounded-2xl flex-1">
-                  <span className="text-sm text-slate-400 font-medium mb-1">Score</span>
-                  <span className="text-2xl font-bold text-indigo-600">{score}</span>
+              <h2 className="text-4xl font-black text-white mb-2 drop-shadow-md">Level Cleared!</h2>
+              <p className="text-indigo-100 mb-8 font-medium">Amazing work! You've mastered this level.</p>
+              
+              <div className="flex items-center justify-center gap-4 mb-8 w-full">
+                <div className="flex flex-col items-center bg-white/10 p-4 rounded-2xl flex-1 border border-white/10">
+                  <span className="text-xs text-indigo-200 font-bold uppercase tracking-wider mb-1">Score</span>
+                  <span className="text-3xl font-black text-white">{score}</span>
                 </div>
-                <div className="flex flex-col items-center bg-slate-50 p-4 rounded-2xl flex-1">
-                  <span className="text-sm text-slate-400 font-medium mb-1">Coins</span>
-                  <div className="flex items-center gap-1">
-                    <span className="text-2xl font-bold text-yellow-500">+{level.words.length * 10}</span>
-                  </div>
+                <div className="flex flex-col items-center bg-white/10 p-4 rounded-2xl flex-1 border border-white/10">
+                  <span className="text-xs text-indigo-200 font-bold uppercase tracking-wider mb-1">Coins</span>
+                  <span className="text-3xl font-black text-yellow-300">+{level.words.length * 10}</span>
                 </div>
               </div>
-
-              {wordMeanings.length > 0 && (
-                <div className="w-full mb-6 max-h-40 overflow-y-auto text-left bg-slate-50 p-4 rounded-2xl">
-                  <h3 className="text-sm font-bold text-slate-600 mb-2 uppercase tracking-wider">Word Meanings</h3>
-                  <div className="flex flex-col gap-3">
-                    {wordMeanings.map((wm, idx) => (
-                      <div key={idx} className="text-sm">
-                        <span className="font-bold text-indigo-600 capitalize">{wm.word}: </span>
-                        <span className="text-slate-600">{wm.meaning}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
 
               <button
-                onClick={handleNextLevel}
-                className="w-full py-4 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-2xl font-bold text-lg shadow-lg hover:shadow-xl transition-all active:scale-95"
+                onClick={() => { playSound(); handleNextLevel(); }}
+                className="w-full py-4 bg-white text-indigo-900 rounded-2xl font-black text-xl shadow-lg hover:bg-indigo-50 transition-all active:scale-95 flex items-center justify-center gap-2"
               >
                 Next Level
               </button>
