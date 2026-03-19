@@ -2,17 +2,24 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Home } from './components/Home';
 import { Game } from './components/Game';
 import { MagicalBackground } from './components/MagicalBackground';
+import { PrivacyPolicy } from './components/PrivacyPolicy';
 import { useGameStore } from './store/gameStore';
 import { auth } from './firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import { SoundProvider } from './context/SoundContext';
 
 export default function App() {
-  const [currentScreen, setCurrentScreen] = useState<'home' | 'game' | 'daily'>('home');
+  const [currentScreen, setCurrentScreen] = useState<'home' | 'game' | 'daily' | 'privacy'>('home');
   const { loadFromCloud, soundEnabled, fetchWords } = useGameStore();
   const audioRef = useRef<HTMLAudioElement>(null);
 
   useEffect(() => {
+    // Check for privacy policy URL parameter
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('page') === 'privacy') {
+      setCurrentScreen('privacy');
+    }
+
     fetchWords();
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -101,6 +108,9 @@ export default function App() {
                   Back to Home
                 </button>
               </div>
+            )}
+            {currentScreen === 'privacy' && (
+              <PrivacyPolicy />
             )}
           </div>
         </div>
