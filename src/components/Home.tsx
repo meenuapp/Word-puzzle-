@@ -4,7 +4,7 @@ import { useGameStore } from '../store/gameStore';
 import { motion, AnimatePresence } from 'motion/react';
 import { Play, Calendar, Trophy, LogIn, LogOut, Coins, Volume2, VolumeX, ArrowLeft } from 'lucide-react';
 import { auth } from '../firebase';
-import { signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from 'firebase/auth';
+import { signInWithPopup, signInWithRedirect, GoogleAuthProvider, signOut, onAuthStateChanged } from 'firebase/auth';
 import { LEVELS } from '../data/levels';
 
 export const Home = ({ onPlay, onDaily }: { onPlay: () => void; onDaily: () => void }) => {
@@ -24,7 +24,16 @@ export const Home = ({ onPlay, onDaily }: { onPlay: () => void; onDaily: () => v
     setLoginError(null);
     try {
       const provider = new GoogleAuthProvider();
-      await signInWithPopup(auth, provider);
+      // Check if running inside an iframe (like AI Studio preview)
+      const inIframe = window.self !== window.top;
+      
+      if (inIframe) {
+        // Use popup for AI Studio iframe to avoid redirect loop issues
+        await signInWithPopup(auth, provider);
+      } else {
+        // Use redirect for Vercel / Android WebView to avoid popup blocks
+        await signInWithRedirect(auth, provider);
+      }
     } catch (error: any) {
       console.error('Login failed', error);
       setLoginError(error.message || 'Failed to sign in. Please try again.');
